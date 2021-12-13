@@ -1,5 +1,23 @@
 const fs = require('fs');
-const { totalmem } = require('os');
+
+const letterLookup = {
+    '011001001010010111101001010010': 'A',
+    '111001001011100100101001011100': 'B',
+    '011001001010000100001001001100': 'C',
+    '111101000011100100001000011110': 'E',
+    '111101000011100100001000010000': 'F',
+    '011001001010000101101001001110': 'G',
+    '100101001011110100101001010010': 'H',
+    '001100001000010000101001001100': 'J',
+    '100101010011000101001010010010': 'K',
+    '100001000010000100001000011110': 'L',
+    '111001001010010111001000010000': 'P',
+    '111001001010010111001010010010': 'R',
+    '100101001010010100101001001100': 'U',
+    '100011000101010001000010000100': 'Y',
+    '111100001000100010001000011110': 'Z',
+    '000000000000000000000000000000': ' ',
+};
 
 const inputData = fs.readFileSync('input.txt', 'utf8').split('\n\n').map(a => a.split('-'));
 
@@ -51,4 +69,18 @@ folds.forEach(fold => {
     }
 })
 
-printMap();
+// use this to have a visual representation
+//printMap();
+
+const letters = Array(8).fill().map(() => [])
+for (let y = 0; y < height; y++) {
+    let currLetter = 0;
+    for (let x = 0; x < width; x++) {
+        letters[Math.floor(currLetter / 5)].push(map[x][y] ? 1 : 0);
+        currLetter++;
+    }
+}
+
+const answer = letters.map(letterArray => letterArray.join('')).map(letterCode => letterLookup[letterCode]).join('');
+
+console.log(answer)
