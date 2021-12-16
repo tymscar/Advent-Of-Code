@@ -10,7 +10,6 @@ const hex2bin = hex => {
 
 const input = hex2bin(fs.readFileSync('input.txt', 'utf8'));
 
-
 const getPackets = bin => {
 	const packets = [];
 	let index = 0;
@@ -19,7 +18,7 @@ const getPackets = bin => {
 		const packet = {};
 		packet.version = parseInt(bin.substr(0 + index, 3), 2);
 		packet.type = parseInt(bin.substr(3 + index, 3), 2);
-		if (packet.type === 4) { // value
+		if (packet.type === 4) {
 			const bitsRead = [];
 			let readPos = 6 + index;
 			let infoBit = '0';
@@ -30,9 +29,9 @@ const getPackets = bin => {
 			} while (readPos + 5 <= bin.length && infoBit !== '0');
 			packet.data = parseInt(bitsRead.join(''), 2);
 			index = readPos;
-		} else { // operator
+		} else {
 
-			if (bin.substr(6 + index, 1) === '0') { // next 15 bits
+			if (bin.substr(6 + index, 1) === '0') {
 
 				const lengthSubPackets = parseInt(bin.substr(7 + index, 15), 2);
 				const subPacketString = bin.substr(22 + index, lengthSubPackets);
@@ -40,7 +39,7 @@ const getPackets = bin => {
 
 				subPackets.forEach(subPack => packets.push(subPack));
 				index = 22 +index + lengthSubPackets;
-			} else { // next 11 bits
+			} else {
 
 				const howManySubPackets = parseInt(bin.substr(7 + index, 11), 2);
 				let subPacketStringLength = bin.length - (18 + index);
@@ -54,15 +53,12 @@ const getPackets = bin => {
 			}
 		}
 
-
-
-
 		packets.push(packet);
 	}
 
 	return packets;
 };
 
-const versionSum = getPackets(input).reduce((total, curr) => total = total + curr.version, 0);
+const versionSum = getPackets(input).reduce((total, curr) => total + curr.version, 0);
 
 console.log(versionSum);
