@@ -50,8 +50,9 @@ class Scanner {
 								(currBeacon[2] - currBeaconOffset[2]) === (savedBeacon[2] - savedBeaconOffset[2])){
 								inCommon++;
 
-								this.pos = [savedBeacon[0] - currBeacon[0], savedBeacon[1] - currBeacon[1], savedBeacon[2] - currBeacon[2]];
-
+								if(inCommon >= 12) {
+									this.pos = [savedBeacon[0] - currBeacon[0], savedBeacon[1] - currBeacon[1], savedBeacon[2] - currBeacon[2]];
+								}
 							}
 						});
 					});
