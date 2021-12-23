@@ -2,22 +2,6 @@ const fs = require('fs');
 
 const input = fs.readFileSync('input.txt', 'utf8').split('\n').slice(2,4).map(a => a.split('')).map(a=>a.filter(b => ['A', 'B', 'C', 'D'].includes(b)));
 
-const connections = [];
-connections['hall0'] = ['hall1'];
-connections['hall1'] = ['hall0', 'room01', 'room00', 'hall3'];
-connections['hall3'] = ['hall1', 'room01', 'room00', 'room11', 'room10', 'hall5'];
-connections['hall5'] = ['hall3', 'room11', 'room10', 'room21', 'room20', 'hall7'];
-connections['hall7'] = ['hall5', 'room21', 'room20', 'room31', 'room30', 'hall9'];
-connections['hall9'] = ['hall7', 'room31', 'room30', 'hall10'];
-connections['hall10'] = ['hall9'];
-connections['room01'] = ['hall1', 'hall3'];
-connections['room00'] = ['hall1', 'hall3'];
-connections['room11'] = ['hall3', 'hall5'];
-connections['room10'] = ['hall3', 'hall5'];
-connections['room21'] = ['hall5', 'hall7'];
-connections['room20'] = ['hall5', 'hall7'];
-connections['room31'] = ['hall7', 'hall9'];
-connections['room30'] = ['hall7', 'hall9'];
 
 const priceToMove = {
 	'A': 1,
@@ -26,189 +10,165 @@ const priceToMove = {
 	'D': 1000
 };
 
-const destinationRoomFor = {
-	'A': ['room00','room01'],
-	'B': ['room10','room11'],
-	'C': ['room20','room21'],
-	'D': ['room30','room31']
+const correspondingRoomNumber = {
+	'A': 0,
+	'B': 1,
+	'C': 2,
+	'D': 3
 };
 
-const neighbourRoom = {
-	'room00': 'room01',
-	'room01': 'room00',
-	'room10': 'room11',
-	'room11': 'room10',
-	'room20': 'room21',
-	'room21': 'room20',
-	'room30': 'room31',
-	'room31': 'room30'
+const hallEntraceFinalRoom = {
+	'A': 2,
+	'B': 4,
+	'C': 6,
+	'D': 8
 };
 
-const bottomRooms = ['room00','room10','room20','room30'];
-const rooms = ['room00','room01','room10','room11','room20','room21','room30','room31'];
-const halls = ['hall0', 'hall1', 'hall3', 'hall5', 'hall7', 'hall9', 'hall10'];
-
-const bestCosts = new Map();
-bestCosts.set(['hall0', 'hall1'].toString(), 1);
-
-bestCosts.set(['hall1', 'hall0'].toString(), 1);
-bestCosts.set(['hall1', 'room01'].toString(), 2);
-bestCosts.set(['hall1', 'room00'].toString(), 3);
-bestCosts.set(['hall1', 'hall3'].toString(), 2);
-
-bestCosts.set(['hall3', 'hall1'].toString(), 2);
-bestCosts.set(['hall3', 'room01'].toString(), 2);
-bestCosts.set(['hall3', 'room00'].toString(), 3);
-bestCosts.set(['hall3', 'room11'].toString(), 2);
-bestCosts.set(['hall3', 'room10'].toString(), 3);
-bestCosts.set(['hall3', 'hall5'].toString(), 2);
-
-bestCosts.set(['hall5', 'hall3'].toString(), 2);
-bestCosts.set(['hall5', 'room11'].toString(), 2);
-bestCosts.set(['hall5', 'room10'].toString(), 3);
-bestCosts.set(['hall5', 'room21'].toString(), 2);
-bestCosts.set(['hall5', 'room20'].toString(), 3);
-bestCosts.set(['hall5', 'hall7'].toString(), 2);
-
-bestCosts.set(['hall7', 'hall5'].toString(), 2);
-bestCosts.set(['hall7', 'room21'].toString(), 2);
-bestCosts.set(['hall7', 'room20'].toString(), 3);
-bestCosts.set(['hall7', 'room31'].toString(), 2);
-bestCosts.set(['hall7', 'room30'].toString(), 3);
-bestCosts.set(['hall7', 'hall9'].toString(), 2);
-
-bestCosts.set(['hall9', 'hall7'].toString(), 2);
-bestCosts.set(['hall9', 'room31'].toString(), 2);
-bestCosts.set(['hall9', 'room30'].toString(), 3);
-bestCosts.set(['hall9', 'hall10'].toString(), 1);
-
-bestCosts.set(['hall10', 'hall9'].toString(), 1);
-
-bestCosts.set(['room01', 'hall1'].toString(), 2);
-bestCosts.set(['room01', 'hall3'].toString(), 2);
-
-bestCosts.set(['room00', 'hall1'].toString(), 3);
-bestCosts.set(['room00', 'hall3'].toString(), 3);
-
-bestCosts.set(['room11', 'hall3'].toString(), 2);
-bestCosts.set(['room11', 'hall5'].toString(), 2);
-
-bestCosts.set(['room10', 'hall3'].toString(), 3);
-bestCosts.set(['room10', 'hall5'].toString(), 3);
-
-bestCosts.set(['room21', 'hall5'].toString(), 2);
-bestCosts.set(['room21', 'hall7'].toString(), 2);
-
-bestCosts.set(['room20', 'hall5'].toString(), 3);
-bestCosts.set(['room20', 'hall7'].toString(), 3);
-
-bestCosts.set(['room31', 'hall7'].toString(), 2);
-bestCosts.set(['room31', 'hall9'].toString(), 2);
-
-bestCosts.set(['room30', 'hall7'].toString(), 3);
-bestCosts.set(['room30', 'hall9'].toString(), 3);
-
+const hallEntranceOfRoom = {
+	0: 2,
+	1: 4,
+	2: 6,
+	3: 8
+};
 
 
 let world = {};
-world.amphipods = [];
-world.amphipods[0] = {};
-world.amphipods[0].pos = 'room01';
-world.amphipods[0].colour = input[0][0];
-world.amphipods[1] = {};
-world.amphipods[1].pos = 'room00';
-world.amphipods[1].colour = input[1][0];
-world.amphipods[2] = {};
-world.amphipods[2].pos = 'room11';
-world.amphipods[2].colour = input[0][1];
-world.amphipods[3] = {};
-world.amphipods[3].pos = 'room10';
-world.amphipods[3].colour = input[1][1];
-world.amphipods[4] = {};
-world.amphipods[4].pos = 'room21';
-world.amphipods[4].colour = input[0][2];
-world.amphipods[5] = {};
-world.amphipods[5].pos = 'room20';
-world.amphipods[5].colour = input[1][2];
-world.amphipods[6] = {};
-world.amphipods[6].pos = 'room31';
-world.amphipods[6].colour = input[0][3];
-world.amphipods[7] = {};
-world.amphipods[7].pos = 'room30';
-world.amphipods[7].colour = input[1][3];
-world.price = 0;
+world.hall = ['.','.','.','.','.','.','.','.','.','.','.'];
+world.rooms = [[input[1][0], input[0][0]],[input[1][1], input[0][1]],[input[1][2], input[0][2]],[input[1][3], input[0][3]]];
 
-const queue = [world];
-const bestStatePrice = new Map();
-const winPrices = [];
+let queue = [world];
+let bestPrice = [];
+bestPrice[JSON.stringify(world)] = 0;
 
-// let moves = 10000000;
+let winPrices = [];
+
 while(queue.length >0){
-	// moves--;
-	const currWroldState = queue.shift();
-	// console.log(currWroldState);
-    
-	//Check if one of the winner states
+
+	const currWorldState = queue.shift();
+	const currentPrice = bestPrice[JSON.stringify(currWorldState)];
+
+	//check if winner
 	let winner = true;
-	for(let i=0; i<8; i++)
-		winner = winner && destinationRoomFor[currWroldState.amphipods[i].colour].includes(currWroldState.amphipods[i].pos);
+	if(currWorldState.rooms[0][0] !== 'A' || currWorldState.rooms[0][1] !== 'A')
+		winner = false;
+	if(currWorldState.rooms[1][0] !== 'B' || currWorldState.rooms[1][1] !== 'B')
+		winner = false;
+	if(currWorldState.rooms[2][0] !== 'C' || currWorldState.rooms[2][1] !== 'C')
+		winner = false;
+	if(currWorldState.rooms[3][0] !== 'D' || currWorldState.rooms[3][1] !== 'D')
+		winner = false;
 	if(winner){
-		winPrices.push(currWroldState.price);
+		winPrices.push(currentPrice);
 		continue;
 	}
 
-	const currUsedPlaces = [];
-	const whatIsInPlace = [];
-	for(let amphIndex=0; amphIndex<8; amphIndex++){
-		currUsedPlaces.push(currWroldState.amphipods[amphIndex].pos);
-		whatIsInPlace[currWroldState.amphipods[amphIndex].pos] = currWroldState.amphipods[amphIndex].colour;
+	// move hallway pieces that can be moved
+	for(let hallLoc= 0; hallLoc<11; hallLoc++){
+		const animalType = currWorldState.hall[hallLoc];
+		if(animalType !== '.'){// There is an animal here
+			const targetRoom = correspondingRoomNumber[animalType];
+			const howManyInFinalRoom = currWorldState.rooms[targetRoom].length;
+			if(howManyInFinalRoom >= 2){
+				continue; //room is full
+			} else if (howManyInFinalRoom === 1){
+				if(currWorldState.rooms[targetRoom][0] !== animalType){
+					continue; //room has the wrong animal inside so dont go
+				}
+			}
+			//room is empty or has exactly one animal of same type
+			const targetHall = hallEntraceFinalRoom[animalType];
+			const step = targetHall > hallLoc ? 1 : -1;
+			let pos = hallLoc;
+			let canWalkThere = true;
+			let extraPrice = 0;
+			while (pos !== targetHall){
+				pos += step;
+				if(currWorldState.hall[pos] !== '.'){
+					canWalkThere = false;
+				}
+				extraPrice += priceToMove[animalType];
+			}
+			if(!canWalkThere)
+				continue; // hit something on my way
+			if(howManyInFinalRoom === 0)
+				extraPrice += (2 * priceToMove[animalType]);
+			else
+				extraPrice += priceToMove[animalType];
+
+			const newState = structuredClone(currWorldState);
+			newState.rooms[targetRoom] = [animalType, ...newState.rooms[targetRoom]];
+			newState.hall[hallLoc] = '.';
+			const newPrice = currentPrice + extraPrice;
+			const oldPriceOfNewState = bestPrice[JSON.stringify(newState)] || 999_999_999;
+			if(newPrice < oldPriceOfNewState){
+				bestPrice[JSON.stringify(newState)] = newPrice;
+				queue.push(newState);
+			}
+		}
 	}
 
-
-	//Find every possible move for each amphipod
-	for(let amphIndex=0; amphIndex<8; amphIndex++){
-		const currPosName = currWroldState.amphipods[amphIndex].pos;
-		if(rooms.includes(currPosName)){ // Im in a room
-			if(destinationRoomFor[currWroldState.amphipods[amphIndex].colour].includes(currPosName)){ // Im in my final room
-				if(bottomRooms.includes(currPosName)){ // In my room at the bottom, dont move
-					continue;
-				}
-				if(whatIsInPlace[neighbourRoom[currWroldState.amphipods[amphIndex].pos]] === currWroldState.amphipods[amphIndex].colour){ // Both spots are perfect, dont move
-					continue;
-				}
-				// I am in my final room but I am blocking so I have to move to the hallway
-				// will move outside of this 'if'
-			}
-			// I am in a room but it's not my final room
-			if(bottomRooms.includes(currPosName) && whatIsInPlace[neighbourRoom[currPosName]] !== undefined){
-				continue; //I am in the bottom room and there is someone blocking me so stay here
-			}
-
-			const placesToMoveTo = [];
-			const placesToMoveToNames = [];
-			let miniqueue = [...connections[currPosName].map(connection => [connection, bestCosts.get([currPosName, connection].toString())])];
-			while(miniqueue.length > 0){
-				const [currPlaceToTry, currPrice] = miniqueue.pop();
-				if(halls.includes(currPlaceToTry) && !placesToMoveToNames.includes(currPlaceToTry) && whatIsInPlace[currPlaceToTry] === undefined){
-					placesToMoveTo.push([currPlaceToTry, currPrice]);
-					placesToMoveToNames.push(currPlaceToTry);
-					miniqueue = [...miniqueue, ...connections[currPlaceToTry].map(connection => [connection, bestCosts.get([currPlaceToTry, connection].toString()) + currPrice])];
-				}
-			}
-			placesToMoveTo.forEach(placeToMove =>{
-				const newState = structuredClone(currWroldState);
-				newState.amphipods[amphIndex].pos = placeToMove[0];
-				newState.price += placeToMove[1] * priceToMove[currWroldState.amphipods[amphIndex].colour];
-				const bestOldPrice = bestStatePrice.get(JSON.stringify(newState)) || 999_999_999;
-				if(newState.price < bestOldPrice){
-					bestStatePrice.set(JSON.stringify(newState), newState.price);
-					queue.push(newState);
-				}
-			});
-		} else { // I am in a hallway
-            
+	// move room pieces that can be moved
+	for(let roomId = 0; roomId < 4; roomId++){
+		let extraPrice = 0;
+		const itemsInRoom = currWorldState.rooms[roomId].length;
+		if(itemsInRoom === 0){
+			continue; // The room is empty, nothing to move out
 		}
+		if(itemsInRoom === 1){
+			if(correspondingRoomNumber[currWorldState.rooms[roomId][0]] === roomId){
+				continue; // Item is in its final room
+			}
+			extraPrice++;
+		}
+
+		if(itemsInRoom === 2){ // Theres two items in the room
+			if(correspondingRoomNumber[currWorldState.rooms[roomId][0]] === roomId &&
+                correspondingRoomNumber[currWorldState.rooms[roomId][1]] === roomId){
+				continue; // Both items in final place, dont move
+			}
+		}
+
+		extraPrice++;
+
+		const possibleNewPlacesAndPrice = [];
+
+		// exploreLeft;
+		let pos = hallEntranceOfRoom[roomId]-1;
+		while(pos >= 0){
+			if(currWorldState.hall[pos] === '.'){
+				extraPrice++;
+			} else {
+				break;
+			}
+			possibleNewPlacesAndPrice.push([pos, extraPrice]);
+			pos--;
+		}
+
+		// exploreRight;
+		pos = hallEntranceOfRoom[roomId]+1;
+		while(pos <= 10){
+			if(currWorldState.hall[pos] === '.'){
+				extraPrice++;
+			} else {
+				break;
+			}
+			possibleNewPlacesAndPrice.push([pos, extraPrice]);
+			pos++;
+		}
+
+		const validNewPlaces = possibleNewPlacesAndPrice.filter(place => ![2,4,6,8].includes(place[0]));
+		validNewPlaces.forEach(validNewPlace => {
+			const newState = structuredClone(currWorldState);
+			const itemMoved = newState.rooms[roomId].shift();
+			newState.hall[validNewPlace[0]] = itemMoved;
+			const newPrice = currentPrice + (extraPrice * priceToMove[itemMoved]);
+			const oldPriceOfNewState = bestPrice[JSON.stringify(newState)] || 999_999_999;
+			if(newPrice < oldPriceOfNewState){
+				bestPrice[JSON.stringify(newState)] = newPrice;
+				queue.push(newState);
+			}
+		});
 	}
 }
 
-console.log(winPrices);
+console.log(Math.min(...winPrices));
