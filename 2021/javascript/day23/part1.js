@@ -130,6 +130,8 @@ while(queue.length >0){
 
 		extraPrice++;
 
+		let beforeMovePrice = extraPrice;
+
 		const possibleNewPlacesAndPrice = [];
 
 		// exploreLeft;
@@ -143,6 +145,8 @@ while(queue.length >0){
 			possibleNewPlacesAndPrice.push([pos, extraPrice]);
 			pos--;
 		}
+
+		extraPrice = beforeMovePrice;
 
 		// exploreRight;
 		pos = hallEntranceOfRoom[roomId]+1;
@@ -161,7 +165,7 @@ while(queue.length >0){
 			const newState = structuredClone(currWorldState);
 			const itemMoved = newState.rooms[roomId].shift();
 			newState.hall[validNewPlace[0]] = itemMoved;
-			const newPrice = currentPrice + (extraPrice * priceToMove[itemMoved]);
+			const newPrice = currentPrice + (validNewPlace[1] * priceToMove[itemMoved]);
 			const oldPriceOfNewState = bestPrice[JSON.stringify(newState)] || 999_999_999;
 			if(newPrice < oldPriceOfNewState){
 				bestPrice[JSON.stringify(newState)] = newPrice;
