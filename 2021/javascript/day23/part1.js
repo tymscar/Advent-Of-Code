@@ -34,7 +34,7 @@ const hallEntranceOfRoom = {
 
 let world = {};
 world.hall = ['.','.','.','.','.','.','.','.','.','.','.'];
-world.rooms = [[input[1][0], input[0][0]],[input[1][1], input[0][1]],[input[1][2], input[0][2]],[input[1][3], input[0][3]]];
+world.rooms = [[input[0][0], input[1][0]],[input[0][1],input[1][1]],[input[0][2], input[1][2]],[input[0][3], input[1][3]]];
 
 let queue = [world];
 let bestPrice = [];
@@ -79,16 +79,16 @@ while(queue.length >0){
 			const targetHall = hallEntraceFinalRoom[animalType];
 			const step = targetHall > hallLoc ? 1 : -1;
 			let pos = hallLoc;
-			let canWalkThere = true;
+			let hitSomething = false;
 			let extraPrice = 0;
 			while (pos !== targetHall){
 				pos += step;
 				if(currWorldState.hall[pos] !== '.'){
-					canWalkThere = false;
+					hitSomething = true;
 				}
 				extraPrice += priceToMove[animalType];
 			}
-			if(!canWalkThere)
+			if(hitSomething)
 				continue; // hit something on my way
 			if(howManyInFinalRoom === 0)
 				extraPrice += (2 * priceToMove[animalType]);
