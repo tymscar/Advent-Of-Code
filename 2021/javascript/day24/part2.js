@@ -22,23 +22,23 @@ const theFunctionThatRepeats = (params, z, w) => {
 	return Math.floor(z / params[0]);
 };
 
-let maxForZ = {0: 0};
+let minForZ = {0: 0};
 
 parameters.forEach(param => {
-	const newMaxForZ = {};
-	for (let z in maxForZ) {
+	const newMinForZ = {};
+	for (let z in minForZ) {
 		for (let inputDigit = 1; inputDigit <= 9; inputDigit++) {
 			const newZ = theFunctionThatRepeats(param, z, inputDigit);
 			if (param[0] === 1 || (param[0] === 26 && newZ < z)) {
-				if (newMaxForZ[newZ] === undefined) {
-					newMaxForZ[newZ] = maxForZ[z] * 10 + inputDigit;
+				if (newMinForZ[newZ] === undefined) {
+					newMinForZ[newZ] = minForZ[z] * 10 + inputDigit;
 				} else {
-					newMaxForZ[newZ] = Math.max(newMaxForZ[newZ], maxForZ[z] * 10 + inputDigit);
+					newMinForZ[newZ] = Math.min(newMinForZ[newZ], minForZ[z] * 10 + inputDigit);
 				}
 			}
 		}
 	}
-	maxForZ = structuredClone(newMaxForZ);
+	minForZ = structuredClone(newMinForZ);
 });
 
-console.log(maxForZ['0']);
+console.log(minForZ['0']);
