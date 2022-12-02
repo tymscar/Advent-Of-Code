@@ -3,6 +3,8 @@
   "scripts": {
     "day1p1": "ts-node day01/part1.ts",
     "day1p2": "ts-node day01/part2.ts",
+    "day2p1": "ts-node day02/part1.ts",
+    "day2p2": "ts-node day02/part2.ts",
     "lint": "eslint ./"
   },
   "author": "tymscar",
