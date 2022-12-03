@@ -1,10 +1,12 @@
 {
   "name": "tymscar-aoc-2022",
   "scripts": {
-    "day1p1": "ts-node day01/part1.ts",
-    "day1p2": "ts-node day01/part2.ts",
-    "day2p1": "ts-node day02/part1.ts",
-    "day2p2": "ts-node day02/part2.ts",
+    "day1p1": "ts-eager day01/part1.ts",
+    "day1p2": "ts-eager day01/part2.ts",
+    "day2p1": "ts-eager day02/part1.ts",
+    "day2p2": "ts-eager day02/part2.ts",
+    "day3p1": "ts-eager day03/part1.ts",
+    "day3p2": "ts-eager day03/part2.ts",
     "lint": "eslint ./"
   },
   "author": "tymscar",
@@ -13,6 +15,7 @@
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "eslint": "^8.28.0",
+    "ts-eager": "^2.0.2",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3"
   }
