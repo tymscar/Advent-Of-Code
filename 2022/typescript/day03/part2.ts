@@ -23,10 +23,13 @@ const letterValue = (letter: string): number => {
 };
 
 const input = fs.readFileSync('inputs/day03.txt', 'utf8').split('\n');
+
+const elfsIngroup = 3;
+
 const groups: Group[] = Array.from(
-	new Array(Math.ceil(input.length / 3)),
-	(_, i) => input.slice(i * 3, i * 3 + 3)
-).filter(group => group.length !== 1);
+	new Array(Math.ceil(input.length / elfsIngroup)),
+	(_, i) => input.slice(i * elfsIngroup, i * elfsIngroup + elfsIngroup)
+).filter(group => group.length === elfsIngroup);
 
 
 const answer = groups.map(commonLetter)
