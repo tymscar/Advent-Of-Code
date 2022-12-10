@@ -1,25 +1,15 @@
 import * as fs from 'fs';
+import decode from './ocr';
 
 const WIDHT = 40;
 const HEIGHT = 6;
+const CHARACTERS = 8;
 
-const renderCRT = (frameBuffer: boolean[]): void => {
-	frameBuffer.forEach((pixelOn, index) => {
-		const sprite = pixelOn ? '█' : ' ';
-
-		process.stdout.write(sprite);
-
-		if((index + 1) % 40 === 0)
-			process.stdout.write('\n');
-	});
-	
-};
-
-const calculatePixelsOn = (register: number, position: number): boolean => {
+const calculatePixels = (register: number, position: number): string => {
 	const currPos = position % 40;
 	const lit = [register - 1, register, register + 1];
 
-	return lit.includes(currPos) ? true : false;
+	return lit.includes(currPos) ? '#' : '.';
 };
 
 const applyInstruction = (history: number[], command: string): number[] => {
@@ -35,6 +25,13 @@ const applyInstruction = (history: number[], command: string): number[] => {
 
 const input = fs.readFileSync('inputs/day10.txt', 'utf8').split('\n').filter(l => l.length > 0);
 const regValues = input.reduce(applyInstruction, [1]).slice(0, WIDHT * HEIGHT);
-const litPixels = regValues.map(calculatePixelsOn);
+const litPixels = regValues.map(calculatePixels);
+const chars = Array(CHARACTERS).fill(0).map((_, i) => 
+	Array(HEIGHT).fill(0).map((_, j) =>
+		litPixels.slice(i * (HEIGHT - 1) + j * WIDHT, (i + 1) * (HEIGHT - 1)  + j * WIDHT)
+	).map(a=>a.join(''))
+);
 
-renderCRT(litPixels);
+const answer = chars.map(decode).map(c => c.toUpperCase()).join('');
+
+console.log(answer);
