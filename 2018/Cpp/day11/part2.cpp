@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-const int INPUT = 2568;
+const int INPUT = 0; // Not actual input
 
 struct vec2 {
 	int x, y;
