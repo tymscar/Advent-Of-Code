@@ -27,6 +27,8 @@
     "day12p2": "ts-eager day12/part2.ts",
     "day13p1": "ts-eager day13/part1.ts",
     "day13p2": "ts-eager day13/part2.ts",
+    "day14p1": "ts-eager day14/part1.ts",
+    "day14p2": "ts-eager day14/part2.ts",
     "lint": "eslint ./"
   },
   "author": "tymscar",
