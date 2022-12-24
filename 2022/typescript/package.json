@@ -48,6 +48,8 @@
     "day23p1f": "ts-eager day23/part1-functional.ts",
     "day23p1": "ts-eager day23/part1.ts",
     "day23p2": "ts-eager day23/part2.ts",
+    "day24p1": "ts-eager day24/part1.ts",
+    "day24p2": "ts-eager day24/part2.ts",
     "lint": "eslint ./"
   },
   "author": "tymscar",
