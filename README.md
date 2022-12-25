@@ -2,6 +2,24 @@
 
 **Advent of Code** is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels that can be solved in any programming language you like. There's **a puzzle** each day with **two parts**. For each part you resolve, you get one **one star**, so by the end of the 25 days, if you do all the 25 puzzles with both parts you get **50 stars**.
 
+## My story in 2022 💽
+By this point Advent of Code and getting 50 stars has become a clear tradition for me.
+
+This year I found the puzzle descriptions way easier to understand, something which I know people and I used to struggle with in the past. The difficult puzzles, 16, 19 and 22 were 3 days apart so I never felt burnt out.
+
+One challenge I set up for myself was to finish as many days as I could fully functionally this year with no side effects and mutation (of course, except input and output).
+
+I did 14/25 days fully functionally. Usually the days I chose to do recursively I did so because of performance reasons. For day23 for example I still have part1 written both functionally and iteratively because I needed the speed for part2.
+Maybe next year I will pick a language that will help me surpass the speed issues I get with recursion in TS.
+
+In the end, **I succeeded 🎉!**!
+
+### What I ended up with
+
+- I finished **all 25 days** with **both parts** for each!
+- I used Typescript for all the puzzles, and I enjoyed it. Made writing code in a functional way quite easy, the only issue I had was the lack of [tail call optimization](https://en.wikipedia.org/wiki/Tail_call).
+- I had a lot of fun and learned a bunch!
+
 ## My story in 2021 ⌨️
 So I got 50/50 stars for the past couple of year, I had to do it now as well!
 
