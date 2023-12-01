@@ -1,0 +1,11 @@
+[package]
+name = "advent-of-code-2023"
+authors = ["Tymscar"]
+version = "0.0.1"
+edition = "2021"
+
+[[bin]]
+name = "day01"
+path = "src/day01/mod.rs"
+
+[dependencies]
