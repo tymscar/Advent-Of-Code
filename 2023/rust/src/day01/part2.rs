@@ -1,31 +1,17 @@
-use std::collections::HashMap;
+const ENGLISH_DIGITS: [&str; 10] = [
+    "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+];
 
 fn parse_line_as_number(line: &str) -> u32 {
-    let mappings: HashMap<&str, u32> = [
-        ("zero", 0),
-        ("one", 1),
-        ("two", 2),
-        ("three", 3),
-        ("four", 4),
-        ("five", 5),
-        ("six", 6),
-        ("seven", 7),
-        ("eight", 8),
-        ("nine", 9),
-    ]
-    .iter()
-    .cloned()
-    .collect();
-
     let mut digits: Vec<u32> = vec![];
 
     for index in 0..line.len() {
         if line.chars().nth(index).is_some_and(|c| c.is_ascii_digit()) {
             digits.push(line.chars().nth(index).unwrap_or('0').to_digit(10).unwrap());
         }
-        for key in mappings.keys() {
-            if line[index..].starts_with(key) {
-                digits.push(*mappings.get(key).unwrap());
+        for (key, value) in ENGLISH_DIGITS.iter().enumerate() {
+            if line[index..].starts_with(value) {
+                digits.push(key as u32);
             }
         }
     }
