@@ -8,4 +8,9 @@ edition = "2021"
 name = "day01"
 path = "src/day01/mod.rs"
 
+[[bin]]
+name = "day02"
+path = "src/day02/mod.rs"
+
 [dependencies]
+regex = "1.10.2"
