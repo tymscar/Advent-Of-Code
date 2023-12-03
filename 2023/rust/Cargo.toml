@@ -12,5 +12,9 @@ path = "src/day01/mod.rs"
 name = "day02"
 path = "src/day02/mod.rs"
 
+[[bin]]
+name = "day03"
+path = "src/day03/mod.rs"
+
 [dependencies]
 regex = "1.10.2"
