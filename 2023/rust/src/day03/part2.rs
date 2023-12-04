@@ -74,7 +74,7 @@ fn get_neighbouring_part_numbers(schematic: &HashMap<Pos, String>, pos: &Pos) ->
     part_numbers
 }
 
-pub fn part2(input: &str) -> String {
+pub fn solve(input: &str) -> String {
     let schematic = get_schematic(input);
 
     let gear_ratios: Vec<usize> = schematic

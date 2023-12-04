@@ -14,7 +14,7 @@ fn calculate_card_matches(card: &str) -> usize {
         })
 }
 
-pub fn part2(input: &str) -> String {
+pub fn solve(input: &str) -> String {
     let lines: Vec<_> = input.split('\n').collect();
     let matches: Vec<_> = lines
         .iter()

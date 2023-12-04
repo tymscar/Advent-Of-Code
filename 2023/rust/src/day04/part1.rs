@@ -19,7 +19,7 @@ fn calculate_card_worth(card: &str) -> usize {
     }
 }
 
-pub fn part1(input: &str) -> String {
+pub fn solve(input: &str) -> String {
     let lines: Vec<_> = input.split('\n').collect();
     let points: Vec<_> = lines
         .iter()

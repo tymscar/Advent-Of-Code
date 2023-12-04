@@ -1,2 +1,5 @@
 inputs/
 target/
+input.txt
+expected_part1.txt
+expected_part2.txt

@@ -14,7 +14,7 @@ fn parse_line_as_number(line: &str) -> u32 {
     first_digit * 10 + last_digit
 }
 
-pub fn part1(input: &str) -> String {
+pub fn solve(input: &str) -> String {
     let lines: Vec<_> = input.split('\n').collect();
     let numbers: Vec<u32> = lines.iter().map(|x| parse_line_as_number(x)).collect();
 

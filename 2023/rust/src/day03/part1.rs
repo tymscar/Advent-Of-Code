@@ -77,7 +77,7 @@ fn has_symbol_neighbour(schematic: &HashMap<Pos, String>, pos: &Pos) -> bool {
     false
 }
 
-pub fn part1(input: &str) -> String {
+pub fn solve(input: &str) -> String {
     let schematic = get_schematic(input);
 
     let part_numbers: Vec<usize> = schematic

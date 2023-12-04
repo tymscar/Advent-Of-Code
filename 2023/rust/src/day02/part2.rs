@@ -67,7 +67,7 @@ impl Game {
     }
 }
 
-pub fn part2(input: &str) -> String {
+pub fn solve(input: &str) -> String {
     let lines: Vec<_> = input.split('\n').collect();
     let games = lines.iter().map(|line| Game::new(line)).collect::<Vec<_>>();
     let powers = games

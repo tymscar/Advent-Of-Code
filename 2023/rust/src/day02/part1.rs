@@ -60,7 +60,7 @@ impl Game {
     }
 }
 
-pub fn part1(input: &str) -> String {
+pub fn solve(input: &str) -> String {
     let lines: Vec<_> = input.split('\n').collect();
     let games = lines.iter().map(|line| Game::new(line)).collect::<Vec<_>>();
     let possible_games = games
