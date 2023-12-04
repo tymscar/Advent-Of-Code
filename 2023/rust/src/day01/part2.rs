@@ -16,7 +16,7 @@ fn parse_line_as_number(line: &str) -> u32 {
         }
     }
 
-    let first_digit = digits.iter().nth(0).unwrap_or(&0);
+    let first_digit = digits.first().unwrap_or(&0);
     let last_digit = digits.iter().nth_back(0).unwrap_or(&0);
 
     first_digit * 10 + last_digit

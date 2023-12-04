@@ -3,7 +3,7 @@ use regex::Regex;
 fn extract_count_with_regex(regex: &str, input: &str) -> u32 {
     let re = Regex::new(regex).unwrap();
     if let Some(captures) = re.captures(input) {
-        if let Some(count) = captures.get(1).unwrap().as_str().parse::<u32>().ok() {
+        if let Ok(count) = captures.get(1).unwrap().as_str().parse::<u32>() {
             return count;
         }
     }
@@ -25,11 +25,7 @@ impl Hand {
         }
     }
     fn new_u32(red: u32, green: u32, blue: u32) -> Hand {
-        Hand {
-            red: red as u32,
-            green: green as u32,
-            blue: blue as u32,
-        }
+        Hand { red, green, blue }
     }
 }
 
@@ -48,7 +44,7 @@ impl Game {
             .map(|round| Hand::new(round))
             .collect::<Vec<_>>();
 
-        return Game { id, hands };
+        Game { id, hands }
     }
 
     fn is_possible_with_hand(&self, hand: Hand) -> bool {

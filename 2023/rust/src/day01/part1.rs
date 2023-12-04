@@ -3,7 +3,7 @@ fn parse_line_as_number(line: &str) -> u32 {
         .chars()
         .filter(|c| c.is_ascii_digit())
         .collect::<Vec<_>>();
-    let first_digit = digits.iter().nth(0).unwrap_or(&'0').to_digit(10).unwrap();
+    let first_digit = digits.first().unwrap_or(&'0').to_digit(10).unwrap();
     let last_digit = digits
         .iter()
         .nth_back(0)

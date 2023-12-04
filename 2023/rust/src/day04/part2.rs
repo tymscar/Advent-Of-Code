@@ -3,8 +3,8 @@ use std::collections::{HashMap, HashSet};
 fn calculate_card_matches(card: &str) -> usize {
     let card: Vec<_> = card.split(": ").collect();
     let card: Vec<_> = card[1].split(" | ").collect();
-    let winning_numbers: HashSet<_> = card[0].split(" ").filter(|x| x.len() > 0).collect();
-    let played_numbers: Vec<_> = card[1].split(" ").filter(|x| x.len() > 0).collect();
+    let winning_numbers: HashSet<_> = card[0].split(' ').filter(|x| !x.is_empty()).collect();
+    let played_numbers: Vec<_> = card[1].split(' ').filter(|x| !x.is_empty()).collect();
 
     played_numbers
         .iter()
@@ -24,7 +24,7 @@ pub fn part2(input: &str) -> String {
     let mut card_amounts: HashMap<usize, usize> = (0..lines.len()).map(|i| (i, 1)).collect();
 
     for (i, matches) in matches.iter().enumerate() {
-        let curr_amount = card_amounts.get(&i).unwrap().clone();
+        let curr_amount = *card_amounts.get(&i).unwrap();
         for index in i + 1..i + matches + 1 {
             if let Some(amount) = card_amounts.get_mut(&(index)) {
                 *amount += curr_amount;

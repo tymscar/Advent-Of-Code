@@ -15,7 +15,7 @@ fn get_schematic(input: &str) -> HashMap<Pos, String> {
                     curr.push(character);
                 }
                 false => {
-                    if curr.len() > 0 {
+                    if !curr.is_empty() {
                         schematic.insert(Pos(i, j - curr.len()), curr.clone());
                         curr.clear();
                     }
@@ -25,7 +25,7 @@ fn get_schematic(input: &str) -> HashMap<Pos, String> {
                 }
             }
         }
-        if curr.len() > 0 {
+        if !curr.is_empty() {
             schematic.insert(Pos(i, line.len() - curr.len()), curr.clone());
             curr.clear();
         }
@@ -55,7 +55,7 @@ fn is_pos_next_to_symbol(schematic: &HashMap<Pos, String>, pos: &Pos) -> bool {
     for pos in neighbouring_positions {
         match schematic.get(&pos) {
             Some(neighbour) => {
-                if !neighbour.chars().nth(0).unwrap().is_numeric() {
+                if !neighbour.chars().next().unwrap().is_numeric() {
                     return true;
                 }
             }
@@ -84,7 +84,7 @@ pub fn part1(input: &str) -> String {
         .iter()
         .filter(|curr| {
             let (pos, symbol) = curr;
-            if symbol.chars().nth(0).unwrap().is_numeric() {
+            if symbol.chars().next().unwrap().is_numeric() {
                 return has_symbol_neighbour(&schematic, pos);
             }
             false
