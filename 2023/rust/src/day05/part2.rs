@@ -53,33 +53,32 @@ pub fn solve(input: &str) -> String {
             let mut curr = range.clone();
             for translation in stage.iter() {
                 let offset = translation[0] - translation[1];
-                if curr.0 <= curr.1 {
-                    if curr.0 <= translation[1] + translation[2] - 1 && translation[1] <= curr.1 {
-                        if curr.0 < translation[1] {
-                            new_ranges.push(Range(curr.0, translation[1] - 1));
-                            curr.0 = translation[1];
-                            if curr.1 <= translation[1] + translation[2] - 1 {
-                                new_ranges.push(Range(curr.0 + offset, curr.1 + offset));
-                                curr.0 = curr.1 + 1;
-                            } else {
-                                new_ranges.push(Range(
-                                    curr.0 + offset,
-                                    translation[1] + translation[2] - 1 + offset,
-                                ));
-                                curr.0 = translation[1] + translation[2];
-                            }
+                if curr.0 <= curr.1
+                    && curr.0 < translation[1] + translation[2]
+                    && translation[1] <= curr.1
+                {
+                    if curr.0 < translation[1] {
+                        new_ranges.push(Range(curr.0, translation[1] - 1));
+                        curr.0 = translation[1];
+                        if curr.1 < translation[1] + translation[2] {
+                            new_ranges.push(Range(curr.0 + offset, curr.1 + offset));
+                            curr.0 = curr.1 + 1;
                         } else {
-                            if curr.1 <= translation[1] + translation[2] - 1 {
-                                new_ranges.push(Range(curr.0 + offset, curr.1 + offset));
-                                curr.0 = curr.1 + 1;
-                            } else {
-                                new_ranges.push(Range(
-                                    curr.0 + offset,
-                                    translation[1] + translation[2] - 1 + offset,
-                                ));
-                                curr.0 = translation[1] + translation[2];
-                            }
+                            new_ranges.push(Range(
+                                curr.0 + offset,
+                                translation[1] + translation[2] - 1 + offset,
+                            ));
+                            curr.0 = translation[1] + translation[2];
                         }
+                    } else if curr.1 < translation[1] + translation[2] {
+                        new_ranges.push(Range(curr.0 + offset, curr.1 + offset));
+                        curr.0 = curr.1 + 1;
+                    } else {
+                        new_ranges.push(Range(
+                            curr.0 + offset,
+                            translation[1] + translation[2] - 1 + offset,
+                        ));
+                        curr.0 = translation[1] + translation[2];
                     }
                 }
             }
