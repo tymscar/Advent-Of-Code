@@ -6,10 +6,9 @@ mod day01;
 mod day02;
 mod day03;
 mod day04;
+mod day05;
 
-pub fn main() {
-    let days: Vec<_> = vec![day01::solve, day02::solve, day03::solve, day04::solve];
-
+fn print_table(days: Vec<fn() -> common::DayData>) {
     println!("╔{}╗", "═".repeat(67));
     println!("║ {:^63} ║", "🦀 Advent of Code 2023 🦀");
     println!(
@@ -60,4 +59,16 @@ pub fn main() {
         "═".repeat(4),
         "═".repeat(12)
     );
+}
+
+pub fn main() {
+    let days: Vec<_> = vec![
+        day01::solve,
+        day02::solve,
+        day03::solve,
+        day04::solve,
+        day05::solve,
+    ];
+
+    print_table(days);
 }
