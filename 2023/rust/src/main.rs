@@ -7,6 +7,7 @@ mod day02;
 mod day03;
 mod day04;
 mod day05;
+mod day06;
 
 fn print_table(days: Vec<fn() -> common::DayData>) {
     let max_name_len = days.iter().map(|f| f().name.len()).max().unwrap();
@@ -88,6 +89,7 @@ pub fn main() {
         day03::solve,
         day04::solve,
         day05::solve,
+        day06::solve,
     ];
 
     print_table(days);
