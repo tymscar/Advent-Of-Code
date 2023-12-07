@@ -1,14 +1,11 @@
 use std::cmp::Ordering;
 
-const NON_JOKER_CARDS: &str = "23456789TQKA";
-
-#[derive(Debug)]
 struct Hand {
     cards: String,
     bid: usize,
 }
 
-#[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
+#[derive(PartialEq, PartialOrd, Eq, Ord)]
 enum HandType {
     HighCard = 0,
     OnePair = 1,
@@ -24,55 +21,75 @@ impl Hand {
         Hand { cards, bid }
     }
 
-    fn generate_all_combinations(cards: String) -> Vec<String> {
-        if !cards.contains('J') {
-            return vec![cards];
-        }
-        let cards = cards.chars().collect::<String>();
-
-        let first_j_pos = cards.find('J').unwrap();
-        NON_JOKER_CARDS
-            .chars()
-            .flat_map(|c| {
-                let mut new_starting_cards = String::new();
-                new_starting_cards.push_str(&cards[0..first_j_pos]);
-                new_starting_cards.push(c);
-                new_starting_cards.push_str(&cards[first_j_pos + 1..]);
-                Self::generate_all_combinations(new_starting_cards.clone())
-            })
-            .collect()
-    }
-
     fn get_best_hand_type(&self) -> HandType {
-        let cards = self.cards.clone();
-        Self::generate_all_combinations(cards)
+        let card_pairs = split_in_groups(&self.cards);
+        let number_of_jokers = card_pairs
             .iter()
-            .map(|cards| {
-                let mut card_pairs = split_in_groups(cards);
-                card_pairs.sort_by_key(|b| std::cmp::Reverse(b.len()));
-                match card_pairs.len() {
-                    1 => HandType::FiveOfAKind,
-                    2 => {
-                        if card_pairs[0].len() == 3 {
-                            HandType::FullHouse
-                        } else {
-                            HandType::FourOfAKind
-                        }
+            .find(|group| group.contains('J'))
+            .unwrap_or(&"".to_string())
+            .len();
+
+        let mut card_pairs = card_pairs
+            .iter()
+            .filter(|group| !group.contains('J'))
+            .collect::<Vec<_>>();
+
+        card_pairs.sort_by_key(|b| std::cmp::Reverse(b.len()));
+
+        if number_of_jokers >= 4 {
+            return HandType::FiveOfAKind;
+        }
+
+        match card_pairs[0].len() {
+            1 => match number_of_jokers {
+                0 => HandType::HighCard,
+                1 => HandType::OnePair,
+                2 => HandType::ThreeOfAKind,
+                3 => HandType::FourOfAKind,
+                4 => HandType::FiveOfAKind,
+                _ => panic!("Unknown hand type"),
+            },
+            2 => match number_of_jokers {
+                0 => {
+                    if card_pairs[1].len() == 2 {
+                        HandType::TwoPairs
+                    } else {
+                        HandType::OnePair
                     }
-                    3 => {
-                        if card_pairs[0].len() == 2 {
-                            HandType::TwoPairs
-                        } else {
-                            HandType::ThreeOfAKind
-                        }
-                    }
-                    4 => HandType::OnePair,
-                    5 => HandType::HighCard,
-                    _ => panic!("Unknown hand type"),
                 }
-            })
-            .max()
-            .unwrap()
+                1 => {
+                    if card_pairs[1].len() == 2 {
+                        HandType::FullHouse
+                    } else {
+                        HandType::ThreeOfAKind
+                    }
+                }
+                2 => HandType::FourOfAKind,
+                3 => HandType::FiveOfAKind,
+                _ => panic!("Unknown hand type"),
+            },
+            3 => match number_of_jokers {
+                0 => {
+                    if card_pairs[1].len() == 2 {
+                        HandType::FullHouse
+                    } else {
+                        HandType::ThreeOfAKind
+                    }
+                }
+                1 => HandType::FourOfAKind,
+                2 => HandType::FiveOfAKind,
+                _ => panic!("Unknown hand type"),
+            },
+            4 => {
+                if number_of_jokers == 1 {
+                    HandType::FiveOfAKind
+                } else {
+                    HandType::FourOfAKind
+                }
+            }
+            5 => HandType::FiveOfAKind,
+            _ => panic!("Unknown hand type"),
+        }
     }
 
     fn cmp(&self, other: &Hand) -> Ordering {
