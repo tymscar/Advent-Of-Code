@@ -39,19 +39,13 @@ fn get_valid_neighbours(map: &Vec<Vec<char>>, position: Position) -> Vec<Positio
         '|' => {
             if y > 0 {
                 match map[y - 1][x] {
-                    '|' => neighbours.push((y - 1, x)),
-                    '7' => neighbours.push((y - 1, x)),
-                    'F' => neighbours.push((y - 1, x)),
-                    'S' => neighbours.push((y - 1, x)),
+                    '|' | '7' | 'F' | 'S' => neighbours.push((y - 1, x)),
                     _ => (),
                 }
             }
             if y < max_height && map[y + 1][x] != '.' {
                 match map[y + 1][x] {
-                    '|' => neighbours.push((y + 1, x)),
-                    'J' => neighbours.push((y + 1, x)),
-                    'L' => neighbours.push((y + 1, x)),
-                    'S' => neighbours.push((y + 1, x)),
+                    '|' | 'J' | 'L' | 'S' => neighbours.push((y + 1, x)),
                     _ => (),
                 }
             }
@@ -59,19 +53,13 @@ fn get_valid_neighbours(map: &Vec<Vec<char>>, position: Position) -> Vec<Positio
         '-' => {
             if x > 0 {
                 match map[y][x - 1] {
-                    '-' => neighbours.push((y, x - 1)),
-                    'F' => neighbours.push((y, x - 1)),
-                    'L' => neighbours.push((y, x - 1)),
-                    'S' => neighbours.push((y, x - 1)),
+                    '-' | 'F' | 'L' | 'S' => neighbours.push((y, x - 1)),
                     _ => (),
                 }
             }
             if x < max_width {
                 match map[y][x + 1] {
-                    '-' => neighbours.push((y, x + 1)),
-                    'J' => neighbours.push((y, x + 1)),
-                    '7' => neighbours.push((y, x + 1)),
-                    'S' => neighbours.push((y, x + 1)),
+                    '-' | 'J' | '7' | 'S' => neighbours.push((y, x + 1)),
                     _ => (),
                 }
             }
@@ -79,19 +67,13 @@ fn get_valid_neighbours(map: &Vec<Vec<char>>, position: Position) -> Vec<Positio
         'L' => {
             if y > 0 {
                 match map[y - 1][x] {
-                    '|' => neighbours.push((y - 1, x)),
-                    '7' => neighbours.push((y - 1, x)),
-                    'F' => neighbours.push((y - 1, x)),
-                    'S' => neighbours.push((y - 1, x)),
+                    '|' | '7' | 'F' | 'S' => neighbours.push((y - 1, x)),
                     _ => (),
                 }
             }
             if x < max_width {
                 match map[y][x + 1] {
-                    '-' => neighbours.push((y, x + 1)),
-                    'J' => neighbours.push((y, x + 1)),
-                    '7' => neighbours.push((y, x + 1)),
-                    'S' => neighbours.push((y, x + 1)),
+                    '-' | 'J' | '7' | 'S' => neighbours.push((y, x + 1)),
                     _ => (),
                 }
             }
@@ -99,19 +81,13 @@ fn get_valid_neighbours(map: &Vec<Vec<char>>, position: Position) -> Vec<Positio
         'J' => {
             if y > 0 {
                 match map[y - 1][x] {
-                    '|' => neighbours.push((y - 1, x)),
-                    '7' => neighbours.push((y - 1, x)),
-                    'F' => neighbours.push((y - 1, x)),
-                    'S' => neighbours.push((y - 1, x)),
+                    '|' | '7' | 'F' | 'S' => neighbours.push((y - 1, x)),
                     _ => (),
                 }
             }
             if x > 0 {
                 match map[y][x - 1] {
-                    '-' => neighbours.push((y, x - 1)),
-                    'F' => neighbours.push((y, x - 1)),
-                    'L' => neighbours.push((y, x - 1)),
-                    'S' => neighbours.push((y, x - 1)),
+                    '-' | 'F' | 'L' | 'S' => neighbours.push((y, x - 1)),
                     _ => (),
                 }
             }
@@ -119,19 +95,13 @@ fn get_valid_neighbours(map: &Vec<Vec<char>>, position: Position) -> Vec<Positio
         '7' => {
             if y < max_height {
                 match map[y + 1][x] {
-                    '|' => neighbours.push((y + 1, x)),
-                    'J' => neighbours.push((y + 1, x)),
-                    'L' => neighbours.push((y + 1, x)),
-                    'S' => neighbours.push((y + 1, x)),
+                    '|' | 'J' | 'L' | 'S' => neighbours.push((y + 1, x)),
                     _ => (),
                 }
             }
             if x > 0 {
                 match map[y][x - 1] {
-                    '-' => neighbours.push((y, x - 1)),
-                    'F' => neighbours.push((y, x - 1)),
-                    'L' => neighbours.push((y, x - 1)),
-                    'S' => neighbours.push((y, x - 1)),
+                    '-' | 'F' | 'L' | 'S' => neighbours.push((y, x - 1)),
                     _ => (),
                 }
             }
@@ -139,19 +109,13 @@ fn get_valid_neighbours(map: &Vec<Vec<char>>, position: Position) -> Vec<Positio
         'F' => {
             if y < max_height {
                 match map[y + 1][x] {
-                    '|' => neighbours.push((y + 1, x)),
-                    'J' => neighbours.push((y + 1, x)),
-                    'L' => neighbours.push((y + 1, x)),
-                    'S' => neighbours.push((y + 1, x)),
+                    '|' | 'J' | 'L' | 'S' => neighbours.push((y + 1, x)),
                     _ => (),
                 }
             }
             if x < max_width {
                 match map[y][x + 1] {
-                    '-' => neighbours.push((y, x + 1)),
-                    'J' => neighbours.push((y, x + 1)),
-                    '7' => neighbours.push((y, x + 1)),
-                    'S' => neighbours.push((y, x + 1)),
+                    '-' | 'J' | '7' | 'S' => neighbours.push((y, x + 1)),
                     _ => (),
                 }
             }
