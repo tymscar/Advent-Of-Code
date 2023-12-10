@@ -12,7 +12,7 @@ pub fn solve() -> DayData {
     let part2_answer = part2::solve(INPUT);
 
     DayData {
-        name: "Day 9: Mirage Maintenance".to_string(),
+        name: "Day 09: Mirage Maintenance".to_string(),
         part1_answer: part1_answer.to_string(),
         part1_correct: part1_answer == EXPECTED_PART1,
         part2_answer: part2_answer.to_string(),
