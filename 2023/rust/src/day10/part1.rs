@@ -4,125 +4,52 @@ type Position = (usize, usize);
 
 fn get_valid_neighbours(map: &Vec<Vec<char>>, position: Position) -> Vec<Position> {
     let (y, x) = position;
-    let mut neighbours: Vec<Position> = vec![];
-    let curr_tile = map[y][x];
+    let mut neighbours = Vec::new();
     let max_height = map.len() - 1;
     let max_width = map[0].len() - 1;
-
-    match curr_tile {
-        'S' => {
-            if y > 0 {
-                match map[y - 1][x] {
-                    '|' | '7' | 'F' => neighbours.push((y - 1, x)),
-                    _ => (),
-                }
-            }
-            if y < max_height {
-                match map[y + 1][x] {
-                    '|' | 'J' | 'L' => neighbours.push((y + 1, x)),
-                    _ => (),
-                }
-            }
-            if x > 0 {
-                match map[y][x - 1] {
-                    '-' | 'F' | 'L' => neighbours.push((y, x - 1)),
-                    _ => (),
-                }
-            }
-            if x < max_width {
-                match map[y][x + 1] {
-                    '-' | 'J' | '7' => neighbours.push((y, x + 1)),
-                    _ => (),
-                }
-            }
+    let moves = match map[y][x] {
+        'S' => vec![
+            (y > 0, y - 1, x, vec!['|', '7', 'F']),
+            (y < max_height, y + 1, x, vec!['|', 'J', 'L']),
+            (x > 0, y, x - 1, vec!['-', 'F', 'L']),
+            (x < max_width, y, x + 1, vec!['-', 'J', '7']),
+        ],
+        '|' => vec![
+            (y > 0, y - 1, x, vec!['|', '7', 'F', 'S']),
+            (
+                y < max_height && map[y + 1][x] != '.',
+                y + 1,
+                x,
+                vec!['|', 'J', 'L', 'S'],
+            ),
+        ],
+        '-' => vec![
+            (x > 0, y, x - 1, vec!['-', 'F', 'L', 'S']),
+            (x < max_width, y, x + 1, vec!['-', 'J', '7', 'S']),
+        ],
+        'L' => vec![
+            (y > 0, y - 1, x, vec!['|', '7', 'F', 'S']),
+            (x < max_width, y, x + 1, vec!['-', 'J', '7', 'S']),
+        ],
+        'J' => vec![
+            (y > 0, y - 1, x, vec!['|', '7', 'F', 'S']),
+            (x > 0, y, x - 1, vec!['-', 'F', 'L', 'S']),
+        ],
+        '7' => vec![
+            (y < max_height, y + 1, x, vec!['|', 'J', 'L', 'S']),
+            (x > 0, y, x - 1, vec!['-', 'F', 'L', 'S']),
+        ],
+        'F' => vec![
+            (y < max_height, y + 1, x, vec!['|', 'J', 'L', 'S']),
+            (x < max_width, y, x + 1, vec!['-', 'J', '7', 'S']),
+        ],
+        _ => Vec::new(),
+    };
+    for (condition, new_y, new_x, tiles) in moves {
+        if condition && tiles.contains(&map[new_y][new_x]) {
+            neighbours.push((new_y, new_x));
         }
-        '|' => {
-            if y > 0 {
-                match map[y - 1][x] {
-                    '|' | '7' | 'F' | 'S' => neighbours.push((y - 1, x)),
-                    _ => (),
-                }
-            }
-            if y < max_height && map[y + 1][x] != '.' {
-                match map[y + 1][x] {
-                    '|' | 'J' | 'L' | 'S' => neighbours.push((y + 1, x)),
-                    _ => (),
-                }
-            }
-        }
-        '-' => {
-            if x > 0 {
-                match map[y][x - 1] {
-                    '-' | 'F' | 'L' | 'S' => neighbours.push((y, x - 1)),
-                    _ => (),
-                }
-            }
-            if x < max_width {
-                match map[y][x + 1] {
-                    '-' | 'J' | '7' | 'S' => neighbours.push((y, x + 1)),
-                    _ => (),
-                }
-            }
-        }
-        'L' => {
-            if y > 0 {
-                match map[y - 1][x] {
-                    '|' | '7' | 'F' | 'S' => neighbours.push((y - 1, x)),
-                    _ => (),
-                }
-            }
-            if x < max_width {
-                match map[y][x + 1] {
-                    '-' | 'J' | '7' | 'S' => neighbours.push((y, x + 1)),
-                    _ => (),
-                }
-            }
-        }
-        'J' => {
-            if y > 0 {
-                match map[y - 1][x] {
-                    '|' | '7' | 'F' | 'S' => neighbours.push((y - 1, x)),
-                    _ => (),
-                }
-            }
-            if x > 0 {
-                match map[y][x - 1] {
-                    '-' | 'F' | 'L' | 'S' => neighbours.push((y, x - 1)),
-                    _ => (),
-                }
-            }
-        }
-        '7' => {
-            if y < max_height {
-                match map[y + 1][x] {
-                    '|' | 'J' | 'L' | 'S' => neighbours.push((y + 1, x)),
-                    _ => (),
-                }
-            }
-            if x > 0 {
-                match map[y][x - 1] {
-                    '-' | 'F' | 'L' | 'S' => neighbours.push((y, x - 1)),
-                    _ => (),
-                }
-            }
-        }
-        'F' => {
-            if y < max_height {
-                match map[y + 1][x] {
-                    '|' | 'J' | 'L' | 'S' => neighbours.push((y + 1, x)),
-                    _ => (),
-                }
-            }
-            if x < max_width {
-                match map[y][x + 1] {
-                    '-' | 'J' | '7' | 'S' => neighbours.push((y, x + 1)),
-                    _ => (),
-                }
-            }
-        }
-        _ => (),
     }
-
     neighbours
 }
 
