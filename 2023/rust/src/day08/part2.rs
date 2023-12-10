@@ -1,9 +1,7 @@
 use std::collections::HashMap;
 
 struct Timing {
-    first_z_pos: usize,
     cycle_len: usize,
-    z_offset_from_cycle_start: usize,
 }
 
 fn lcm_of_list(numbers: &[usize]) -> usize {
@@ -67,7 +65,6 @@ pub fn solve(input: &str) -> String {
                 curr_place = places[&curr_place][curr_instruction].to_owned();
                 steps += 1;
             }
-            let z_pos: usize = steps;
             let mut z_offset_from_cycle_start = usize::max_value();
             steps = 0;
 
@@ -88,30 +85,11 @@ pub fn solve(input: &str) -> String {
                 steps += 1;
             }
 
-            Timing {
-                first_z_pos: z_pos,
-                cycle_len: steps,
-                z_offset_from_cycle_start,
-            }
+            Timing { cycle_len: steps }
         })
         .collect();
 
     let timings_lcm = lcm_of_list(&timings.iter().map(|t| t.cycle_len).collect::<Vec<_>>());
 
-    let mut curr_time = 0;
-    loop {
-        let mut all_synced = true;
-        for t in &timings {
-            if (curr_time - t.first_z_pos - t.z_offset_from_cycle_start) % t.cycle_len != 0 {
-                all_synced = false;
-                break;
-            }
-        }
-        if all_synced {
-            break;
-        }
-        curr_time += timings_lcm;
-    }
-
-    curr_time.to_string()
+    timings_lcm.to_string()
 }
