@@ -16,12 +16,7 @@ fn get_valid_neighbours(map: &Vec<Vec<char>>, position: Position) -> Vec<Positio
         ],
         '|' => vec![
             (y > 0, y - 1, x, vec!['|', '7', 'F', 'S']),
-            (
-                y < max_height && map[y + 1][x] != '.',
-                y + 1,
-                x,
-                vec!['|', 'J', 'L', 'S'],
-            ),
+            (y < max_height, y + 1, x, vec!['|', 'J', 'L', 'S']),
         ],
         '-' => vec![
             (x > 0, y, x - 1, vec!['-', 'F', 'L', 'S']),
