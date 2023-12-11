@@ -38,7 +38,7 @@ fn get_empty_rows(map: &[Vec<char>]) -> Vec<usize> {
     empty_rows
 }
 
-fn get_distances(map: &[Vec<char>]) -> Vec<Distance> {
+fn get_distances(map: &[Vec<char>], expansion_coefficient: usize) -> Vec<Distance> {
     let mut distances = vec![];
     let empty_columns = get_empty_columns(map);
     let empty_rows = get_empty_rows(map);
@@ -69,14 +69,14 @@ fn get_distances(map: &[Vec<char>]) -> Vec<Distance> {
             for y in first_y..second_y {
                 y_dist += 1;
                 if empty_rows.contains(&y) {
-                    y_dist += 1;
+                    y_dist += expansion_coefficient - 1;
                 }
             }
 
             for x in first_x..second_x {
                 x_dist += 1;
                 if empty_columns.contains(&x) {
-                    x_dist += 1;
+                    x_dist += expansion_coefficient - 1;
                 }
             }
 
@@ -94,7 +94,7 @@ pub fn solve(input: &str) -> String {
         .map(|l| l.chars().collect::<Vec<_>>())
         .collect::<Vec<_>>();
 
-    let distances = get_distances(&map);
+    let distances = get_distances(&map, 1000000);
 
     let total_distance = distances.iter().sum::<usize>() / 2;
 
