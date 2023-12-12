@@ -2,119 +2,59 @@ use std::collections::HashMap;
 use std::str::FromStr;
 
 fn get_combinations(
-    springs: &Vec<char>,
-    instructions: &Vec<u128>,
-    memoization: &mut HashMap<(Vec<u128>, Vec<char>), u128>,
-) -> u128 {
-    if springs.is_empty() {
-        if instructions.is_empty() {
+    springs: &str,
+    instrs: &[usize],
+    s_idx: usize,
+    i_idx: usize,
+    memo: &mut HashMap<(usize, usize), usize>,
+) -> usize {
+    if springs.len() <= s_idx {
+        if instrs.len() <= i_idx {
             return 1;
         } else {
             return 0;
         }
     }
 
-    let first_spring = springs[0];
-
-    let next_combinations_same_instr =
-        get_combinations(&springs[1..].to_vec(), instructions, memoization);
-
-    match first_spring {
-        '.' => next_combinations_same_instr,
-        '#' => {
-            if let Some(&curr_combinations) =
-                memoization.get(&(instructions.clone(), springs.clone()))
-            {
-                return curr_combinations;
-            }
-
-            if instructions.is_empty() {
-                return 0;
-            }
-
-            let wanted_spring_len = instructions[0] as usize;
-            if springs.len() < wanted_spring_len {
-                return 0;
-            }
-
-            for spring in &springs[0..wanted_spring_len] {
-                if spring == &'.' {
-                    return 0;
-                }
-            }
-
-            if springs.len() == wanted_spring_len {
-                if instructions.len() == 1 {
-                    return 1;
-                }
-                return 0;
-            }
-
-            if springs[wanted_spring_len] == '#' {
-                return 0;
-            }
-
-            let next_combinations_next_instr: u128 = get_combinations(
-                &springs[(wanted_spring_len + 1)..].to_vec(),
-                &instructions[1..].to_vec(),
-                memoization,
-            );
-
-            memoization.insert(
-                (instructions.clone(), springs.clone()),
-                next_combinations_next_instr,
-            );
-
-            next_combinations_next_instr
+    if instrs.len() <= i_idx {
+        if springs[s_idx..].contains('#') {
+            return 0;
+        } else {
+            return 1;
         }
-        '?' => {
-            if let Some(&curr_combinations) =
-                memoization.get(&(instructions.clone(), springs.clone()))
-            {
-                return curr_combinations + next_combinations_same_instr;
-            }
-
-            if instructions.is_empty() {
-                return next_combinations_same_instr;
-            }
-
-            let wanted_spring_len = instructions[0] as usize;
-            if springs.len() < wanted_spring_len {
-                return next_combinations_same_instr;
-            }
-
-            for spring in &springs[0..wanted_spring_len] {
-                if spring == &'.' {
-                    return next_combinations_same_instr;
-                }
-            }
-            if springs.len() == wanted_spring_len {
-                if instructions.len() == 1 {
-                    return 1 + next_combinations_same_instr;
-                }
-
-                return next_combinations_same_instr;
-            }
-
-            if springs[wanted_spring_len] == '#' {
-                return next_combinations_same_instr;
-            }
-
-            let next_combinations_next_instr: u128 = get_combinations(
-                &springs[(wanted_spring_len + 1)..].to_vec(),
-                &instructions[1..].to_vec(),
-                memoization,
-            );
-
-            memoization.insert(
-                (instructions.clone(), springs.clone()),
-                next_combinations_next_instr,
-            );
-
-            next_combinations_next_instr + next_combinations_same_instr
-        }
-        _ => panic!("Invalid spring"),
     }
+
+    if let Some(cached_value) = memo.get(&(s_idx, i_idx)) {
+        return *cached_value;
+    }
+
+    let curr_spring = springs.chars().nth(s_idx).unwrap();
+    let expected_springs: usize = *instrs.get(i_idx).unwrap();
+
+    let mut result = 0;
+
+    if curr_spring == '.' || curr_spring == '?' {
+        result += get_combinations(springs, instrs, s_idx + 1, i_idx, memo);
+    }
+
+    if (curr_spring == '#' || curr_spring == '?')
+        && (springs.len() - s_idx) >= expected_springs
+        && !springs[s_idx..(expected_springs + s_idx)].contains('.')
+        && ((springs.len() - s_idx) == expected_springs
+            || springs.chars().nth(expected_springs + s_idx).unwrap() != '#')
+    {
+        result += get_combinations(
+            springs,
+            instrs,
+            expected_springs + 1 + s_idx,
+            i_idx + 1,
+            memo,
+        );
+    }
+
+    memo.insert((s_idx, i_idx), result);
+
+    result
 }
 
 pub fn solve(input: &str) -> String {
@@ -140,7 +80,7 @@ pub fn solve(input: &str) -> String {
                 springs.to_string(),
                 instructions
                     .split(',')
-                    .map(u128::from_str)
+                    .map(usize::from_str)
                     .map(|a| a.unwrap())
                     .collect::<Vec<_>>(),
             )
@@ -151,8 +91,8 @@ pub fn solve(input: &str) -> String {
         .iter()
         .map(|(a, b)| {
             let mut memoization = HashMap::new();
-            get_combinations(&a.chars().collect::<Vec<_>>(), b, &mut memoization)
+            get_combinations(a, b, 0, 0, &mut memoization)
         })
-        .sum::<u128>()
+        .sum::<usize>()
         .to_string()
 }
