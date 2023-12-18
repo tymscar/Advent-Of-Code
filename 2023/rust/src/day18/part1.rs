@@ -16,7 +16,7 @@ struct Instruction {
     steps: usize,
 }
 
-fn shoelace_formula(points: &Vec<Position>) -> isize {
+fn shoelace_formula(points: &[Position], perimeter: isize) -> isize {
     let mut s1 = 0;
     let mut s2 = 0;
     for positions in points.windows(2) {
@@ -24,8 +24,7 @@ fn shoelace_formula(points: &Vec<Position>) -> isize {
         s2 += positions[1].x * positions[0].y;
     }
     let area = (s1 - s2).abs() / 2;
-    let perimeter = (points.len() - 1) as isize;
-    area - perimeter / 2 + 1
+    area - (perimeter / 2) + 1
 }
 
 pub fn solve(input: &str) -> String {
@@ -50,29 +49,26 @@ pub fn solve(input: &str) -> String {
 
     let mut curr_pos = Position { x: 0, y: 0 };
     let mut holes: Vec<Position> = vec![curr_pos];
+    let mut perimeter: isize = 0;
 
     for instruction in instructions {
-        for _ in 0..instruction.steps {
-            match instruction.direction {
-                Direction::Up => {
-                    curr_pos.y -= 1;
-                }
-                Direction::Down => {
-                    curr_pos.y += 1;
-                }
-                Direction::Left => {
-                    curr_pos.x -= 1;
-                }
-                Direction::Right => {
-                    curr_pos.x += 1;
-                }
+        perimeter += instruction.steps as isize;
+        match instruction.direction {
+            Direction::Up => {
+                curr_pos.y -= instruction.steps as isize;
             }
-            holes.push(curr_pos);
+            Direction::Down => {
+                curr_pos.y += instruction.steps as isize;
+            }
+            Direction::Left => {
+                curr_pos.x -= instruction.steps as isize;
+            }
+            Direction::Right => {
+                curr_pos.x += instruction.steps as isize;
+            }
         }
+        holes.push(curr_pos);
     }
 
-    let area = shoelace_formula(&holes);
-    let perimeter = (holes.len() - 1) as isize;
-
-    (area + perimeter).to_string()
+    (shoelace_formula(&holes, perimeter) + perimeter).to_string()
 }
