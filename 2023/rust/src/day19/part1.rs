@@ -7,18 +7,10 @@ enum RuleKind {
     Default,
 }
 
-#[derive(Clone, Copy)]
-enum Category {
-    Cool,
-    Musical,
-    Aerodynamic,
-    Shiny,
-}
-
 #[derive(Clone)]
 struct Rule {
     kind: RuleKind,
-    subject: Category,
+    subject: usize,
     benchmark: usize,
     destination: String,
 }
@@ -28,10 +20,7 @@ struct Workflow {
 }
 
 struct Rating {
-    x: usize,
-    m: usize,
-    a: usize,
-    s: usize,
+    value: [usize; 4],
     total: usize,
 }
 
@@ -41,76 +30,22 @@ impl Rating {
         loop {
             let mut destination: String = "R".to_string();
             for rule in &curr_workflow.rules {
-                match rule.subject {
-                    Category::Cool => match rule.kind {
-                        RuleKind::LessThan => {
-                            if self.x < rule.benchmark {
-                                destination = rule.destination.clone();
-                                break;
-                            }
-                        }
-                        RuleKind::GreaterThan => {
-                            if self.x > rule.benchmark {
-                                destination = rule.destination.clone();
-                                break;
-                            }
-                        }
-                        RuleKind::Default => {
+                match rule.kind {
+                    RuleKind::LessThan => {
+                        if self.value[rule.subject] < rule.benchmark {
                             destination = rule.destination.clone();
+                            break;
                         }
-                    },
-
-                    Category::Musical => match rule.kind {
-                        RuleKind::LessThan => {
-                            if self.m < rule.benchmark {
-                                destination = rule.destination.clone();
-                                break;
-                            }
-                        }
-                        RuleKind::GreaterThan => {
-                            if self.m > rule.benchmark {
-                                destination = rule.destination.clone();
-                                break;
-                            }
-                        }
-                        RuleKind::Default => {
+                    }
+                    RuleKind::GreaterThan => {
+                        if self.value[rule.subject] > rule.benchmark {
                             destination = rule.destination.clone();
+                            break;
                         }
-                    },
-                    Category::Aerodynamic => match rule.kind {
-                        RuleKind::LessThan => {
-                            if self.a < rule.benchmark {
-                                destination = rule.destination.clone();
-                                break;
-                            }
-                        }
-                        RuleKind::GreaterThan => {
-                            if self.a > rule.benchmark {
-                                destination = rule.destination.clone();
-                                break;
-                            }
-                        }
-                        RuleKind::Default => {
-                            destination = rule.destination.clone();
-                        }
-                    },
-                    Category::Shiny => match rule.kind {
-                        RuleKind::LessThan => {
-                            if self.s < rule.benchmark {
-                                destination = rule.destination.clone();
-                                break;
-                            }
-                        }
-                        RuleKind::GreaterThan => {
-                            if self.s > rule.benchmark {
-                                destination = rule.destination.clone();
-                                break;
-                            }
-                        }
-                        RuleKind::Default => {
-                            destination = rule.destination.clone();
-                        }
-                    },
+                    }
+                    RuleKind::Default => {
+                        destination = rule.destination.clone();
+                    }
                 }
             }
             match destination.chars().next().unwrap() {
@@ -142,11 +77,11 @@ pub fn solve(input: &str) -> String {
                             '>' => RuleKind::GreaterThan,
                             _ => panic!("Invalid rule {}", rule[0]),
                         };
-                        let subject: Category = match rule[0].chars().next().unwrap() {
-                            'x' => Category::Cool,
-                            'm' => Category::Musical,
-                            'a' => Category::Aerodynamic,
-                            's' => Category::Shiny,
+                        let subject: usize = match rule[0].chars().next().unwrap() {
+                            'x' => 0,
+                            'm' => 1,
+                            'a' => 2,
+                            's' => 3,
                             _ => panic!("Invalid rule {}", rule[0]),
                         };
                         let benchmark: usize = rule[0][2..].parse().unwrap();
@@ -159,7 +94,7 @@ pub fn solve(input: &str) -> String {
                     }
                     None => Rule {
                         kind: RuleKind::Default,
-                        subject: Category::Cool,
+                        subject: 0,
                         benchmark: 0,
                         destination: rule.to_string(),
                     },
@@ -177,8 +112,9 @@ pub fn solve(input: &str) -> String {
             let m = line[1][2..].parse().unwrap();
             let a = line[2][2..].parse().unwrap();
             let s = line[3][2..].parse().unwrap();
+            let value = [x, m, a, s];
             let total = x + m + a + s;
-            Rating { x, m, a, s, total }
+            Rating { value, total }
         })
         .collect();
 
