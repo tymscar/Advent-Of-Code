@@ -1,48 +1,30 @@
 use std::{collections::HashMap, usize};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Clone)]
 enum RuleKind {
     LessThan,
     GreaterThan,
     Default,
 }
 
-#[derive(Debug, Clone, Copy)]
-enum Category {
-    Cool,
-    Musical,
-    Aerodynamic,
-    Shiny,
-}
-
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 struct Rule {
     kind: RuleKind,
-    subject: Category,
+    subject: usize,
     benchmark: usize,
     destination: String,
 }
 
-#[derive(Debug)]
 struct Workflow {
     rules: Vec<Rule>,
 }
 
-#[derive(Debug, Clone, Copy)]
-struct Range {
-    x: (usize, usize),
-    m: (usize, usize),
-    a: (usize, usize),
-    s: (usize, usize),
-}
+type Range = [(usize, usize); 4];
 
-impl Range {
-    fn get_combinations(&self) -> usize {
-        (self.x.1 - self.x.0 + 1)
-            * (self.m.1 - self.m.0 + 1)
-            * (self.a.1 - self.a.0 + 1)
-            * (self.s.1 - self.s.0 + 1)
-    }
+fn get_combinations(range: Range) -> usize {
+    range
+        .iter()
+        .fold(1, |acc, &(start, end)| acc * (end - start + 1))
 }
 
 fn get_valid_ranges(
@@ -50,176 +32,43 @@ fn get_valid_ranges(
     curr_workflow_name: String,
     workflows: &HashMap<String, Workflow>,
 ) -> Vec<Range> {
-    if curr_workflow_name == "A" {
-        return vec![curr_range];
-    }
-    if curr_workflow_name == "R" {
-        return vec![];
+    match curr_workflow_name.as_str() {
+        "A" => return vec![curr_range],
+        "R" => return vec![],
+        _ => (),
     }
 
     let mut valid_ranges: Vec<Range> = Vec::new();
-    let mut curr_range = curr_range.clone();
+    let mut curr_range = curr_range;
     let curr_workflow = workflows.get(&curr_workflow_name).unwrap();
 
     for rule in &curr_workflow.rules {
         let destination = rule.destination.clone();
-        match rule.subject {
-            Category::Cool => match rule.kind {
-                RuleKind::LessThan => {
-                    if curr_range.x.1 < rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(curr_range, destination, workflows))
-                    } else if curr_range.x.0 < rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(
-                            Range {
-                                x: (curr_range.x.0, rule.benchmark - 1),
-                                m: curr_range.m,
-                                a: curr_range.a,
-                                s: curr_range.s,
-                            },
-                            destination,
-                            workflows,
-                        ));
-                        curr_range.x.0 = rule.benchmark;
-                    }
-                }
-                RuleKind::GreaterThan => {
-                    if curr_range.x.0 > rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(curr_range, destination, workflows))
-                    } else if curr_range.x.1 > rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(
-                            Range {
-                                x: (rule.benchmark + 1, curr_range.x.1),
-                                m: curr_range.m,
-                                a: curr_range.a,
-                                s: curr_range.s,
-                            },
-                            destination,
-                            workflows,
-                        ));
-                        curr_range.x.1 = rule.benchmark;
-                    }
-                }
-                RuleKind::Default => {
+
+        match rule.kind {
+            RuleKind::LessThan => {
+                if curr_range[rule.subject].1 < rule.benchmark {
                     valid_ranges.extend(get_valid_ranges(curr_range, destination, workflows))
+                } else if curr_range[rule.subject].0 < rule.benchmark {
+                    let mut new_range = curr_range;
+                    new_range[rule.subject].1 = rule.benchmark - 1;
+                    valid_ranges.extend(get_valid_ranges(new_range, destination, workflows));
+                    curr_range[rule.subject].0 = rule.benchmark;
                 }
-            },
-            Category::Musical => match rule.kind {
-                RuleKind::LessThan => {
-                    if curr_range.m.1 < rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(curr_range, destination, workflows))
-                    } else if curr_range.m.0 < rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(
-                            Range {
-                                x: curr_range.x,
-                                m: (curr_range.m.0, rule.benchmark - 1),
-                                a: curr_range.a,
-                                s: curr_range.s,
-                            },
-                            destination,
-                            workflows,
-                        ));
-                        curr_range.m.0 = rule.benchmark;
-                    }
-                }
-                RuleKind::GreaterThan => {
-                    if curr_range.m.0 > rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(curr_range, destination, workflows))
-                    } else if curr_range.m.1 > rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(
-                            Range {
-                                x: curr_range.x,
-                                m: (rule.benchmark + 1, curr_range.m.1),
-                                a: curr_range.a,
-                                s: curr_range.s,
-                            },
-                            destination,
-                            workflows,
-                        ));
-                        curr_range.m.1 = rule.benchmark;
-                    }
-                }
-                RuleKind::Default => {
+            }
+            RuleKind::GreaterThan => {
+                if curr_range[rule.subject].0 > rule.benchmark {
                     valid_ranges.extend(get_valid_ranges(curr_range, destination, workflows))
+                } else if curr_range[rule.subject].1 > rule.benchmark {
+                    let mut new_range = curr_range;
+                    new_range[rule.subject].0 = rule.benchmark + 1;
+                    valid_ranges.extend(get_valid_ranges(new_range, destination, workflows));
+                    curr_range[rule.subject].1 = rule.benchmark;
                 }
-            },
-            Category::Aerodynamic => match rule.kind {
-                RuleKind::LessThan => {
-                    if curr_range.a.1 < rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(curr_range, destination, workflows))
-                    } else if curr_range.a.0 < rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(
-                            Range {
-                                x: curr_range.x,
-                                m: curr_range.m,
-                                a: (curr_range.a.0, rule.benchmark - 1),
-                                s: curr_range.s,
-                            },
-                            destination,
-                            workflows,
-                        ));
-                        curr_range.a.0 = rule.benchmark;
-                    }
-                }
-                RuleKind::GreaterThan => {
-                    if curr_range.a.0 > rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(curr_range, destination, workflows))
-                    } else if curr_range.a.1 > rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(
-                            Range {
-                                x: curr_range.x,
-                                m: curr_range.m,
-                                a: (rule.benchmark + 1, curr_range.a.1),
-                                s: curr_range.s,
-                            },
-                            destination,
-                            workflows,
-                        ));
-                        curr_range.a.1 = rule.benchmark;
-                    }
-                }
-                RuleKind::Default => {
-                    valid_ranges.extend(get_valid_ranges(curr_range, destination, workflows))
-                }
-            },
-            Category::Shiny => match rule.kind {
-                RuleKind::LessThan => {
-                    if curr_range.s.1 < rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(curr_range, destination, workflows))
-                    } else if curr_range.s.0 < rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(
-                            Range {
-                                x: curr_range.x,
-                                m: curr_range.m,
-                                a: curr_range.a,
-                                s: (curr_range.s.0, rule.benchmark - 1),
-                            },
-                            destination,
-                            workflows,
-                        ));
-                        curr_range.s.0 = rule.benchmark;
-                    }
-                }
-                RuleKind::GreaterThan => {
-                    if curr_range.s.0 > rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(curr_range, destination, workflows))
-                    } else if curr_range.s.1 > rule.benchmark {
-                        valid_ranges.extend(get_valid_ranges(
-                            Range {
-                                x: curr_range.x,
-                                m: curr_range.m,
-                                a: curr_range.a,
-                                s: (rule.benchmark + 1, curr_range.s.1),
-                            },
-                            destination,
-                            workflows,
-                        ));
-                        curr_range.s.1 = rule.benchmark;
-                    }
-                }
-                RuleKind::Default => {
-                    valid_ranges.extend(get_valid_ranges(curr_range, destination, workflows))
-                }
-            },
+            }
+            RuleKind::Default => {
+                valid_ranges.extend(get_valid_ranges(curr_range, destination, workflows))
+            }
         }
     }
 
@@ -244,11 +93,11 @@ pub fn solve(input: &str) -> String {
                             '>' => RuleKind::GreaterThan,
                             _ => panic!("Invalid rule {}", rule[0]),
                         };
-                        let subject: Category = match rule[0].chars().next().unwrap() {
-                            'x' => Category::Cool,
-                            'm' => Category::Musical,
-                            'a' => Category::Aerodynamic,
-                            's' => Category::Shiny,
+                        let subject: usize = match rule[0].chars().next().unwrap() {
+                            'x' => 0,
+                            'm' => 1,
+                            'a' => 2,
+                            's' => 3,
                             _ => panic!("Invalid rule {}", rule[0]),
                         };
                         let benchmark: usize = rule[0][2..].parse().unwrap();
@@ -261,7 +110,7 @@ pub fn solve(input: &str) -> String {
                     }
                     None => Rule {
                         kind: RuleKind::Default,
-                        subject: Category::Cool,
+                        subject: 0,
                         benchmark: 0,
                         destination: rule.to_string(),
                     },
@@ -272,17 +121,12 @@ pub fn solve(input: &str) -> String {
         .collect();
 
     get_valid_ranges(
-        Range {
-            x: (1, 4000),
-            m: (1, 4000),
-            a: (1, 4000),
-            s: (1, 4000),
-        },
+        [(1, 4000), (1, 4000), (1, 4000), (1, 4000)],
         "in".to_string(),
         &workflows,
     )
     .into_iter()
-    .map(|range| range.get_combinations())
+    .map(get_combinations)
     .sum::<usize>()
     .to_string()
 }
