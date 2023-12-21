@@ -22,6 +22,7 @@ mod day17;
 mod day18;
 mod day19;
 mod day20;
+mod day21;
 
 fn format_duration(duration: std::time::Duration) -> String {
     if duration.as_micros() < 1_000 {
@@ -127,6 +128,7 @@ pub fn main() {
         day18::solve,
         day19::solve,
         day20::solve,
+        day21::solve,
     ];
 
     print_table(days);
