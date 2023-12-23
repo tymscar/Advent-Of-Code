@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 type Position = (usize, usize);
 
@@ -65,17 +65,23 @@ fn get_longest_dist(
     start: Position,
     end: Position,
     map: &HashMap<Position, HashMap<Position, usize>>,
+    seen: &HashSet<Position>,
 ) -> isize {
     if start == end {
         return 0;
     }
 
+    let mut new_seen = seen.clone();
+    new_seen.insert(start);
+
     let mut distance = isize::MIN;
 
     for neighbour in map.get(&start).unwrap().keys() {
-        let next_dist = get_longest_dist(*neighbour, end, map);
-        distance =
-            distance.max(next_dist + *map.get(&start).unwrap().get(neighbour).unwrap() as isize);
+        if !new_seen.contains(neighbour) {
+            let next_dist = get_longest_dist(*neighbour, end, map, &new_seen);
+            distance = distance
+                .max(next_dist + *map.get(&start).unwrap().get(neighbour).unwrap() as isize);
+        }
     }
 
     distance
@@ -128,5 +134,5 @@ pub fn solve(input: &str) -> String {
         }
     }
 
-    get_longest_dist(start_pos, end_pos, &map).to_string()
+    get_longest_dist(start_pos, end_pos, &map, &HashSet::new()).to_string()
 }
