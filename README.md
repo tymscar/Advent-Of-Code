@@ -2,6 +2,59 @@
 
 **Advent of Code** is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels that can be solved in any programming language you like. There's **a puzzle** each day with **two parts**. For each part you resolve, you get one **one star**, so by the end of the 25 days, if you do all the 25 puzzles with both parts you get **50 stars**.
 
+## My story in 2023 🦀
+Another year, another Advent of Code! I was quite hyped for this one because 2023 wasn't my best year in general.
+
+The challenge for this year was to use Rust. I have read Rust code before, and I have played with some small CLI programs, but I have never used it in anger for as long as this.
+
+There were some amazing problems this year that I enjoyed very much, such as day 19 and day 25, and some that I didn't enjoy like 24, and 21 because either I needed to use third party crates, like Z3 for 24, or there were hidden assumptions in the input such as day 21.
+
+I got very confident in my Rust skills, and I can't wait to use it more for other projects! I was afraid at first that I will get stuck with rust's borrow checker when the problems would get harder, but that has never been the case, and it's a much easier task than I have expected. I only really got stuck with lifetimes once, but I managed to solve the issue quite quickly with the help of the compiler.
+
+Here is a nice table for all the problems of this year, I have generated it in rust too! (It looks better in the terminal with a monospace emoji font)
+
+```
+╔════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                 🦀 Advent of Code 2023 🦀                                 ║
+╠═════════════════════════════════════════╦══════════════════╦═════════════════════╦═════════╣
+║ Day                                     ║ Part 1           ║ Part 2              ║ Time    ║
+╠═════════════════════════════════════════╬════════════╦═════╬═══════════════╦═════╬═════════╣
+║ Day 01: Trebuchet?!                     ║ 55538      ║ ✅ ║ 54875          ║ ✅ ║  402 μs ║
+║ Day 02: Cube Conundrum                  ║ 2600       ║ ✅ ║ 86036          ║ ✅ ║  141 ms ║
+║ Day 03: Gear Ratios                     ║ 527369     ║ ✅ ║ 73074886       ║ ✅ ║   15 ms ║
+║ Day 04: Scratchcards                    ║ 23028      ║ ✅ ║ 9236992        ║ ✅ ║  433 μs ║
+║ Day 05: If You Give A Seed A Fertilizer ║ 157211394  ║ ✅ ║ 50855035       ║ ✅ ║   76 μs ║
+║ Day 06: Wait For It                     ║ 393120     ║ ✅ ║ 36872656       ║ ✅ ║   66 ms ║
+║ Day 07: Camel Cards                     ║ 248422077  ║ ✅ ║ 249817836      ║ ✅ ║    6 ms ║
+║ Day 08: Haunted Wasteland               ║ 13301      ║ ✅ ║ 7309459565207  ║ ✅ ║   14 ms ║
+║ Day 09: Mirage Maintenance              ║ 1696140818 ║ ✅ ║ 1152           ║ ✅ ║  459 μs ║
+║ Day 10: Pipe Maze                       ║ 6923       ║ ✅ ║ 529            ║ ✅ ║    4 ms ║
+║ Day 11: Cosmic Expansion                ║ 9545480    ║ ✅ ║ 406725732046   ║ ✅ ║   82 ms ║
+║ Day 12: Hot Springs                     ║ 7771       ║ ✅ ║ 10861030975833 ║ ✅ ║   28 ms ║
+║ Day 13: Point of Incidence              ║ 32723      ║ ✅ ║ 34536          ║ ✅ ║    6 ms ║
+║ Day 14: Parabolic Reflector Dish        ║ 112048     ║ ✅ ║ 105606         ║ ✅ ║   17 ms ║
+║ Day 15: Lens Library                    ║ 511257     ║ ✅ ║ 239484         ║ ✅ ║  344 μs ║
+║ Day 16: The Floor Will Be Lava          ║ 7472       ║ ✅ ║ 7716           ║ ✅ ║  238 ms ║
+║ Day 17: Clumsy Crucible                 ║ 817        ║ ✅ ║ 925            ║ ✅ ║  262 ms ║
+║ Day 18: Lavaduct Lagoon                 ║ 50603      ║ ✅ ║ 96556251590677 ║ ✅ ║   83 μs ║
+║ Day 19: Aplenty                         ║ 476889     ║ ✅ ║ 132380153677887║ ✅ ║  600 μs ║
+║ Day 20: Pulse Propagation               ║ 812721756  ║ ✅ ║ 233338595643977║ ✅ ║   56 ms ║
+║ Day 21: Step Counter                    ║ 3773       ║ ✅ ║ 625628021226274║ ✅ ║  441 ms ║
+║ Day 22: Sand Slabs                      ║ 403        ║ ✅ ║ 70189          ║ ✅ ║   12 ms ║
+║ Day 23: A Long Walk                     ║ 2250       ║ ✅ ║ 6470           ║ ✅ ║    4 s  ║
+║ Day 24: Never Tell Me The Odds          ║ 11246      ║ ✅ ║ 716599937560103║ ✅ ║    2 s  ║
+║ Day 25: Snowverload                     ║ 507626     ║ ✅ ║                ║ ✅ ║  221 ms ║
+╚═════════════════════════════════════════╩════════════╩═════╩═══════════════╩═════╩═════════╝
+```
+
+In the end, **I succeeded 🎉!**!
+
+### What I ended up with
+
+- I finished **all 25 days** with **both parts** for each!
+- I learned Rust, and I have managed to write quick and correct programs
+- I had a lot of fun and learned a bunch!
+
 ## My story in 2022 💽
 By this point Advent of Code and getting 50 stars has become a clear tradition for me.
 
