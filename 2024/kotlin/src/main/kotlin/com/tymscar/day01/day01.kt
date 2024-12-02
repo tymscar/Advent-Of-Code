@@ -1,4 +1,4 @@
-package com.tymscar.com.tymscar.day01
+package com.tymscar.day01
 
 import java.io.File
 import com.tymscar.day01.part1.solve as part1
