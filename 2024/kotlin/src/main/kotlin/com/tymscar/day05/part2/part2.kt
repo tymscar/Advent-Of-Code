@@ -1,6 +1,5 @@
 package com.tymscar.day05.part2
 
-import kotlinx.coroutines.*
 
 private fun isValidUpdate(update: List<String>, orderingRules: Map<String, List<String>>): Boolean = update
     .withIndex()
@@ -18,11 +17,11 @@ private fun correctUpdate(update: List<String>, orderingRules: Map<String, List<
             correctedUpdate.withIndex().forEach { (index, page) ->
                 val previousPages = correctedUpdate.take(index)
                 val shouldBeLaterPages = orderingRules[page] ?: listOf()
-                if (previousPages.any { shouldBeLaterPages.contains(it) }) {
-                    val firstPageToSwap = previousPages.first { shouldBeLaterPages.contains(it) }
-                    val firstPageToSwapIndex = correctedUpdate.indexOf(firstPageToSwap)
-                    correctedUpdate.removeAt(firstPageToSwapIndex)
-                    correctedUpdate.add(index, firstPageToSwap)
+                val firstPageToSwapIndex = previousPages.indexOfFirst { shouldBeLaterPages.contains(it) }
+                if (firstPageToSwapIndex != -1) {
+                    val firstPageToSwap = previousPages[firstPageToSwapIndex]
+                    correctedUpdate[index] = firstPageToSwap
+                    correctedUpdate[firstPageToSwapIndex] = page
                     return@breaking
                 }
             }
@@ -42,18 +41,9 @@ fun solve(input: String): String {
         .map { it.groupValues[0].split(",") }
         .toList()
 
-    val invalidUpdates = pagesToCheck.filter { !isValidUpdate(it, orderingRules) }
-
-    return runBlocking {
-        val deferredResults = invalidUpdates.mapIndexed { index, update ->
-            async(Dispatchers.Default) {
-                val correctedUpdate = correctUpdate(update, orderingRules)
-                correctedUpdate[correctedUpdate.count() / 2].toInt()
-            }
-        }
-
-        val results = deferredResults.awaitAll()
-        return@runBlocking results.sum().toString()
-    }
-
+    return pagesToCheck
+        .filter { !isValidUpdate(it, orderingRules) }
+        .sumOf() { correctUpdate(it, orderingRules)
+        .let { it[it.count() / 2].toInt() } }
+        .toString()
 }
