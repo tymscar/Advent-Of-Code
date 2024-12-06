@@ -67,18 +67,23 @@ data class Position(val y: Int, val x: Int) {
     }
 }
 
-private tailrec fun doesItLoop(
-    currentPath: List<Pair<Position, Direction>>,
+private fun doesItLoop(
+    start: Pair<Position, Direction>,
     extraObstacle: Position,
-    grid: List<List<Tile>>,
+    grid: List<List<Tile>>
 ): Boolean {
-    val (currentPosition, currentDirection) = currentPath.last()
+    var (currentPosition, currentDirection) = start
+    val visited = HashSet<Pair<Position, Direction>>()
 
-    val (nextPosition, nextDir) = currentPosition.getNextValidPosition(currentDirection, extraObstacle, grid)
-    return when {
-        nextPosition.isOutsideGrid(grid) -> false
-        (nextPosition to nextDir) in currentPath -> true
-        else -> doesItLoop(currentPath + (nextPosition to nextDir), extraObstacle, grid)
+    while (true) {
+        if ((currentPosition to currentDirection) in visited) return true
+        visited.add(currentPosition to currentDirection)
+
+        val (nextPosition, nextDir) = currentPosition.getNextValidPosition(currentDirection, extraObstacle, grid)
+        if (nextPosition.isOutsideGrid(grid)) return false
+
+        currentPosition = nextPosition
+        currentDirection = nextDir
     }
 }
 
@@ -105,13 +110,9 @@ fun solve(input: String): String {
         }.filterNotNull()
     }
 
-    val startingList = listOf((startingPosition to Direction.UP))
+    val starting = (startingPosition to Direction.UP)
 
     return possibleObstaclePositions
-        .mapIndexed { index, position ->
-                if (index % 100 == 0) println("Processing $index")
-                doesItLoop(startingList, position, grid)
-        }
-        .count { it }
+        .count { doesItLoop(starting, it, grid) }
         .toString()
 }
