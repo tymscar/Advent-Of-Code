@@ -9,6 +9,7 @@ import com.tymscar.day06.solve as day06
 import com.tymscar.day07.solve as day07
 import com.tymscar.day08.solve as day08
 import com.tymscar.day09.solve as day09
+import com.tymscar.day10.solve as day10
 
 fun main() {
     day01()
@@ -20,4 +21,5 @@ fun main() {
     day07()
     day08()
     day09()
+    day10()
 }

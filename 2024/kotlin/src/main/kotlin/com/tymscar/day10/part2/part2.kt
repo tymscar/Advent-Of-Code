@@ -9,42 +9,33 @@ private data class Step(val x: Int, val y: Int, val height: Int) {
     )
 }
 
+private fun countTrails(end: Step, map: Map<Pair<Int, Int>, Step>): Int {
+    var count = 0
 
-
-private fun countTrails(start: Step, map: Map<Pair<Int, Int>, Step>): Int {
-    var validTrails = mutableListOf<List<Step>>()
-
-    var toVisit = ArrayDeque<List<Step>>()
-    toVisit.add(listOf(start))
+    var toVisit = mutableListOf(end)
     while (!toVisit.isEmpty()) {
         val currentTrail = toVisit.removeFirst()
-        if (currentTrail.last().height == 9) {
-            validTrails.add(currentTrail.toList())
-            continue
-        }
+        if (currentTrail.height == 0) count++
 
-       currentTrail.last().getNeighbours(map).forEach { neighbour ->
-           if(neighbour.height - currentTrail.last().height in 0..1 && !currentTrail.contains(neighbour)) {
-               toVisit.add(currentTrail + neighbour)
-           }
-        }
-    }
-    return validTrails.count()
-}
-
-fun solve(input: String): String {
-    val steps = input.lines().withIndex().flatMap { (i, line) ->
-        line.withIndex().map { (j, point) ->
-            when (point) {
-                '.' -> Step(i, j, Int.MAX_VALUE)
-                else -> Step(i, j, point.digitToInt())
+        currentTrail.getNeighbours(map).forEach { neighbour ->
+            if (currentTrail.height - neighbour.height == 1) {
+                toVisit.add(neighbour)
             }
         }
     }
 
+    return count
+}
+
+fun solve(input: String): String {
+    val steps = input.lines().withIndex().flatMap { (i, line) ->
+        line.withIndex().map { (j, point) -> Step(i, j, point.digitToInt()) }
+    }
+
     val map = steps.associateBy { it.x to it.y }
-    val startingPoints = steps.filter { it.height == 0 }
 
-
-    return startingPoints.sumOf { countTrails(it, map) }.toString()
+    return steps
+        .filter { it.height == 9 }
+        .sumOf { countTrails(it, map) }
+        .toString()
 }
