@@ -14,6 +14,7 @@ import com.tymscar.day11.solve as day11
 import com.tymscar.day12.solve as day12
 import com.tymscar.day13.solve as day13
 import com.tymscar.day14.solve as day14
+import com.tymscar.day15.solve as day15
 
 fun main() {
     day01()
@@ -30,4 +31,5 @@ fun main() {
     day12()
     day13()
     day14()
+    day15()
 }
