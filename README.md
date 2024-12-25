@@ -2,6 +2,56 @@
 
 **Advent of Code** is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels that can be solved in any programming language you like. There's **a puzzle** each day with **two parts**. For each part you resolve, you get one **one star**, so by the end of the 25 days, if you do all the 25 puzzles with both parts you get **50 stars**.
 
+## My story in 2024 🦄
+
+This year marked an exciting milestone as I started my new role as a **Senior Software Engineer at Glean**. To align with my work and further enhance my skills, I decided to tackle the Advent of Code challenges using **Kotlin**. This choice not only allowed me to apply what I use daily at work but also made solving the puzzles more seamless and enjoyable.
+
+I'm proud to share that I **achieved 50 stars** once again, maintaining my streak of consistent participation. The puzzles were both engaging and thought-provoking, providing just the right level of challenge to keep me motivated throughout the 25 days.
+
+While I thoroughly enjoyed the variety, I was a bit disappointed that there were no **cellular automata** puzzles this year. However, the abundance of **Dijkstra**-related challenges more than made up for it, giving me ample opportunities to dive deep into graph algorithms and pathfinding problems.
+
+Overall, this year's Advent of Code was a perfect blend of professional growth and personal accomplishment, and I'm looking forward to what next year has in store!
+
+```
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                           🦄 Advent of Code 2024 🦄                                            ║
+╠════════════════════════════════╦═══════════════════════╦════════════════════════════════════════════╦══════════╣
+║ Day                            ║ Part 1                ║ Part 2                                     ║ Time     ║
+╠════════════════════════════════╬═══════════════════════╬════════════════════════════════════════════╬══════════╣
+║ Day 01: Historian Hysteria     ║ 1189304            ✅ ║ 24349736                                ✅ ║ 29    ms ║
+║ Day 02: Red-Nosed Reports      ║ 639                ✅ ║ 674                                     ✅ ║ 15    ms ║
+║ Day 03: Mull It Over           ║ 159833790          ✅ ║ 89349241                                ✅ ║ 10    ms ║
+║ Day 04: Ceres Search           ║ 2562               ✅ ║ 1902                                    ✅ ║ 124   ms ║
+║ Day 05: Print Queue            ║ 4814               ✅ ║ 5448                                    ✅ ║ 138   ms ║
+║ Day 06: Guard Gallivant        ║ 4758               ✅ ║ 1670                                    ✅ ║ 3      s ║
+║ Day 07: Bridge Repair          ║ 1289579105366      ✅ ║ 92148721834692                          ✅ ║ 18    ms ║
+║ Day 08: Resonant Collinearity  ║ 240                ✅ ║ 955                                     ✅ ║ 5     ms ║
+║ Day 09: Disk Fragmenter        ║ 6310675819476      ✅ ║ 6335972980679                           ✅ ║ 1      s ║
+║ Day 10: Hoof It                ║ 638                ✅ ║ 1289                                    ✅ ║ 260   ms ║
+║ Day 11: Plutonian Pebbles      ║ 212655             ✅ ║ 253582809724830                         ✅ ║ 60    ms ║
+║ Day 12: Garden Groups          ║ 1370258            ✅ ║ 805814                                  ✅ ║ 304   ms ║
+║ Day 13: Claw Contraption       ║ 28887              ✅ ║ 96979582619758                          ✅ ║ 5     ms ║
+║ Day 14: Restroom Redoubt       ║ 218965032          ✅ ║ 7037                                    ✅ ║ 263   ms ║
+║ Day 15: Warehouse Woes         ║ 1406628            ✅ ║ 1432781                                 ✅ ║ 491   ms ║
+║ Day 16: Reindeer Maze          ║ 102460             ✅ ║ 527                                     ✅ ║ 14     s ║
+║ Day 17: Chronospatial Computer ║ 6,0,6,3,0,2,3,1,6  ✅ ║ 236539226447469                         ✅ ║ 6     ms ║
+║ Day 18: RAM Run                ║ 324                ✅ ║ 46,23                                   ✅ ║ 939   ms ║
+║ Day 19: Linen Layout           ║ 213                ✅ ║ 1016700771200474                        ✅ ║ 360   ms ║
+║ Day 20: Race Condition         ║ 1317               ✅ ║ 982474                                  ✅ ║ 1      s ║
+║ Day 21: Keypad Conundrum       ║ 270084             ✅ ║ 329431019997766                         ✅ ║ 1      s ║
+║ Day 22: Monkey Market          ║ 12759339434        ✅ ║ 1405                                    ✅ ║ 27     s ║
+║ Day 23: LAN Party              ║ 1108               ✅ ║ ab,cp,ep,fj,fl,ij,in,ng,pl,qr,rx,va,vf  ✅ ║ 221   ms ║
+║ Day 24: Crossed Wires          ║ 57344080719736     ✅ ║ cgq,fnr,kqk,nbc,svm,z15,z23,z39         ✅ ║ 8     ms ║
+║ Day 25: Code Chronicle         ║ 3133               ✅ ║                                         ✅ ║ 15    ms ║
+╚════════════════════════════════╩═══════════════════════╩════════════════════════════════════════════╩══════════╝
+```
+
+### What I ended up with
+
+- I embraced **Kotlin**, leveraging it from my new role at Glean to solve complex problems efficiently.
+- I maintained my streak by achieving **50 stars** once again.
+- I had a lot of fun and learned a bunch!
+
 ## My story in 2023 🦀
 Another year, another Advent of Code! I was quite hyped for this one because 2023 wasn't my best year in general.
 
