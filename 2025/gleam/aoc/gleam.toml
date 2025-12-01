@@ -1,0 +1,6 @@
+name = "aoc"
+version = "1.0.0"
+
+[dependencies]
+gleam_stdlib = ">= 0.44.0 and < 2.0.0"
+simplifile = ">= 2.3.1 and < 3.0.0"
