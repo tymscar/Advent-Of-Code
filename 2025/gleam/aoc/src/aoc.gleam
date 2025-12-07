@@ -11,6 +11,8 @@ import day05/part1 as d5p1
 import day05/part2 as d5p2
 import day06/part1 as d6p1
 import day06/part2 as d6p2
+import day07/part1 as d7p1
+import day07/part2 as d7p2
 
 pub fn main() -> Nil {
   d1p1.solve() |> io.println
@@ -25,4 +27,6 @@ pub fn main() -> Nil {
   d5p2.solve() |> io.println
   d6p1.solve() |> io.println
   d6p2.solve() |> io.println
+  d7p1.solve() |> io.println
+  d7p2.solve() |> io.println
 }
