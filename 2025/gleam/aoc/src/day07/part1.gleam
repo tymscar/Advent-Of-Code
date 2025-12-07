@@ -21,38 +21,57 @@ type Position {
   Position(y: Int, x: Int)
 }
 
-fn get_touched_splitters_from(
-  position: Position,
+fn get_touched_splitters(
   splitters: List(Position),
+  starting_postion: Position,
   max_depth: Int,
 ) -> Set(Position) {
-  case position.y > max_depth {
-    True -> set.from_list([])
-    False -> {
-      case splitters |> list.contains(position) {
-        True ->
-          set.insert(
-            set.union(
-              get_touched_splitters_from(
-                Position(position.y, position.x - 1),
-                splitters,
-                max_depth,
-              ),
-              get_touched_splitters_from(
-                Position(position.y, position.x + 1),
-                splitters,
-                max_depth,
-              ),
-            ),
-            position,
-          )
+  get_touched_splitters__helper(
+    [starting_postion],
+    splitters,
+    max_depth,
+    set.from_list([]),
+  )
+}
 
-        False ->
-          get_touched_splitters_from(
-            Position(position.y + 1, position.x),
+fn get_touched_splitters__helper(
+  positions_to_check: List(Position),
+  splitters: List(Position),
+  max_depth: Int,
+  acc: Set(Position),
+) -> Set(Position) {
+  case positions_to_check {
+    [] -> acc
+    [pos, ..rest] -> {
+      case acc |> set.contains(pos) {
+        True -> get_touched_splitters__helper(rest, splitters, max_depth, acc)
+        False -> {
+          let #(new_acc, new_positions_to_check) = case
+            splitters |> list.contains(pos)
+          {
+            True -> #(
+              acc |> set.insert(pos),
+              rest
+                |> list.append([
+                  Position(x: pos.x + 1, y: pos.y),
+                  Position(x: pos.x - 1, y: pos.y),
+                ]),
+            )
+            False -> {
+              let new_pos = Position(x: pos.x, y: pos.y + 1)
+              case new_pos.y > max_depth {
+                True -> #(acc, rest)
+                False -> #(acc, rest |> list.append([new_pos]))
+              }
+            }
+          }
+          get_touched_splitters__helper(
+            new_positions_to_check,
             splitters,
             max_depth,
+            new_acc,
           )
+        }
       }
     }
   }
@@ -89,8 +108,8 @@ pub fn solve() -> String {
     splitters
     |> list.fold(0, fn(max_depth, curr) { int.max(max_depth, curr.y) })
 
-
-  echo get_touched_splitters_from(starting_position, splitters, max_depth) |> set.size
-
-  "WIP"
+  splitters
+  |> get_touched_splitters(starting_position, max_depth)
+  |> set.size
+  |> int.to_string
 }
