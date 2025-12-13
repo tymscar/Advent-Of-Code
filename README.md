@@ -2,6 +2,34 @@
 
 **Advent of Code** is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels that can be solved in any programming language you like. There's **a puzzle** each day with **two parts**. For each part you resolve, you get one **one star**, so by the end of the 25 days, if you do all the 25 puzzles with both parts you get **50 stars**.
 
+## My story in 2025 ✨
+
+2025 was a bit unusual. It was only **12 days** long, so **24 parts** instead of the usual 50. That shorter schedule did not make it "easy". It made the pacing feel faster, like the puzzles expected a full toolbox while I was still building it.
+
+This year, I picked **Gleam**.
+
+Gleam ended up being a fantastic AoC language for the "parse to transform to fold to repeat" rhythm. The compiler and error messages are genuinely great, Rust good. Pipes make solutions read like intent, and `echo` is an absurdly ergonomic way to inspect values mid pipeline without disrupting flow.
+
+A few highlights from the month:
+
+- **Options everywhere** made grid problems feel safe by default (out of bounds just becomes `None`).
+- The **list toolbox** surprised me: `list.transpose` and `list.combination_pairs` felt like cheat codes.
+- `list.fold_until` became my favorite discovery: early exit without hacks is perfect for puzzle code.
+- Targeting both **Erlang and JavaScript** was fun, but it also meant caring about overflow on the JS side, so I reached for `bigi` a few times.
+
+Where Gleam fought me a bit:
+
+- File IO and regex were both dependencies (`simplifile` and `gleam_regexp`).
+- List pattern matching is powerful, but you cannot do `[first, ..middle, last]`.
+- Comparisons return an `order` value, which can be a bit verbose when you just want `<=`.
+
+My favorite moment was a puzzle that clicked into place as **XOR with bitmasks**. When the representation does the work, the code gets delightfully small. The least satisfying moment was also very AoC. I generated an LP file and shelled out to `glpsol` using `shellout` because it was the pragmatic way to solve it.
+
+### What I ended up with
+
+- I finished **all 12 days** (all parts) for **24/24 stars**.
+- I had a lot of fun and learned a bunch.
+
 ## My story in 2024 🦄
 
 This year marked an exciting milestone as I started my new role as a **Senior Software Engineer at Glean**. To align with my work and further enhance my skills, I decided to tackle the Advent of Code challenges using **Kotlin**. This choice not only allowed me to apply what I use daily at work but also made solving the puzzles more seamless and enjoyable.
